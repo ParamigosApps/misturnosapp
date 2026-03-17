@@ -17,22 +17,7 @@ type BrandSettings = {
 const STORAGE_KEY = 'misturnosapp-gallery'
 const BRAND_STORAGE_KEY = 'misturnosapp-brand'
 
-const defaultGallery: GalleryImage[] = [
-  {
-    id: 'default-1',
-    title: 'Home de reservas',
-    description: 'Muestra servicios, profesionales, horarios y reseñas integradas.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    id: 'default-2',
-    title: 'Panel administrativo',
-    description: 'Gestiona turnos, clientes, pagos, señas y configuracion del negocio.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80',
-  },
-]
+const defaultGallery: GalleryImage[] = []
 
 const defaultBrand: BrandSettings = {
   logoUrl: '/logo.png',
@@ -42,7 +27,8 @@ const defaultBrand: BrandSettings = {
 
 const highlights = [
   'Sin costo extra por agregar profesionales, gabinetes o nuevos servicios',
-  'Costo fijo del sistema en 0 y cobro por uso en cada turno con sena',
+  'Cada servicio puede tener precio base y variables complementarias para adaptarse a cada caso',
+  'Costo fijo del sistema en 0 y cobro por uso en cada turno con seña',
   'Mercado Pago integrado para cobrar señas y agilizar reservas',
   'Descuentos por pago en efectivo para incentivar ese medio de cobro',
   'Si el servicio es automatizado, el cliente reserva, paga y confirma solo',
@@ -51,7 +37,7 @@ const highlights = [
 const metrics = [
   { value: '$0', label: 'costo fijo por sumar servicios, gabinetes o profesionales' },
   { value: '24/7', label: 'reservas disponibles incluso fuera de horario' },
-  { value: 'Automatico', label: 'confirmacion inmediata cuando el servicio lo permite' },
+  { value: '100%', label: 'flexible, permite adaptar las agendas a nececesidad' },
 ]
 
 const featureGroups = [
@@ -62,6 +48,7 @@ const featureGroups = [
       'Buscador de servicios por nombre o categoria',
       'Seleccion de profesional dentro de cada servicio',
       'Visualizacion de precios, duracion y detalles antes de reservar',
+      'Servicios con precio base y variables complementarias segun cada necesidad',
       'Disponibilidad armada segun gabinete y horario del servicio',
       'Reservas manuales o coordinadas por WhatsApp',
       'Perfil de usuario y panel de Mis turnos',
@@ -101,9 +88,10 @@ const featureGroups = [
 
 const businessBenefits = [
   'No se cobra adicional por sumar profesionales, gabinetes ni servicios.',
-  'El costo fijo del sistema es 0 y se paga por cada turno que efectivamente lleva sena.',
+  'El costo fijo del sistema es 0 y se paga por cada turno que efectivamente lleva seña.',
   'Automatiza la toma de turnos sin depender de mensajes manuales.',
   'Permite que el cliente vea la agenda, elija, pague con Mercado Pago y confirme solo.',
+  'Se adapta a cada negocio con servicios configurables desde un precio base y complementos variables.',
   'Permite ofrecer descuentos por pago en efectivo para fomentar ese metodo cuando te conviene.',
   'Reduce ausencias con reservas mas claras, señas previas y recordatorios.',
   'Mejora la organizacion de agenda, profesionales, gabinetes y espacios.',
@@ -132,7 +120,7 @@ const steps = [
   {
     title: 'Tus clientes reservan sin friccion',
     description:
-      'Eligen servicio, profesional, horario y sena en una experiencia simple y clara.',
+      'Eligen servicio, profesional, horario y seña en una experiencia simple y clara.',
   },
   {
     title: 'Tu equipo trabaja con mas orden',
@@ -164,7 +152,7 @@ function readStoredGallery(): GalleryImage[] {
 
   try {
     const parsed = JSON.parse(raw) as GalleryImage[]
-    if (!Array.isArray(parsed) || parsed.length === 0) return defaultGallery
+    if (!Array.isArray(parsed)) return defaultGallery
     return parsed
   } catch {
     return defaultGallery
@@ -259,12 +247,14 @@ function LandingPage({
           <p className="hero-text">
             Fue creado para resolver los problemas de organizacion en esteticas
             que quieren ordenar su agenda, cobrar señas, mostrar mejor sus
-            servicios y dar una experiencia moderna desde el celular. Si el
-            servicio esta marcado como automatizado, el cliente ve la agenda,
-            elige turno, paga con Mercado Pago y la reserva se confirma sin
-            necesidad de intervenir. Tambien podes ofrecer descuentos por pago
-            en efectivo para fomentar ese metodo y hacerlo mas atractivo para
-            tus clientes.
+            servicios y dar una experiencia moderna desde el celular. Ademas,
+            cada servicio se puede armar con un precio base y sumar variables
+            complementarias para adaptarse mejor a lo que realmente ofrece tu
+            centro. Si el servicio esta marcado como automatizado, el cliente ve
+            la agenda, elige turno, paga con Mercado Pago y la reserva se
+            confirma sin necesidad de intervenir. Tambien podes ofrecer
+            descuentos por pago en efectivo para fomentar ese metodo y hacerlo
+            mas atractivo para tus clientes.
           </p>
 
           <div className="hero-actions">
@@ -288,6 +278,7 @@ function LandingPage({
             <span />
             <span />
             <span />
+            <img className="browser-favicon" src="/favicon.svg" alt="" aria-hidden="true" />
             <p>centrobelleza.misturnosapp.com.ar</p>
           </div>
 
@@ -298,21 +289,23 @@ function LandingPage({
               <article className="hero-image-card">
                 <img src={featuredImage.imageUrl} alt={featuredImage.title} />
                 <div className="hero-image-copy">
-                  <span className="panel-label">Vista destacada</span>
+                  <span className="panel-label">Captura real de la app</span>
                   <strong>{featuredImage.title}</strong>
                   <p>{featuredImage.description}</p>
                 </div>
               </article>
-            ) : null}
-
-            <div className="schedule-panel">
-              <div>
-                <span className="panel-label">Proximo turno</span>
-                <strong>Hoy, 17:30 hs</strong>
-                <p>Lash lifting + pago por Mercado Pago + confirmacion automatica</p>
-              </div>
-              <div className="status-pill">Sena pagada</div>
-            </div>
+            ) : (
+              <article className="hero-image-card hero-image-empty">
+                <div className="hero-image-copy">
+                  <span className="panel-label">Captura real de la app</span>
+                  <strong>Este espacio esta listo para mostrar screenshots reales</strong>
+                  <p>
+                    Carga imagenes reales desde <strong>/admin</strong> y se van a ver aca
+                    automaticamente en el hero.
+                  </p>
+                </div>
+              </article>
+            )}
 
             <div className="availability-grid">
               <article>
@@ -444,22 +437,12 @@ function LandingPage({
           <span className="section-kicker">Lista para crecer</span>
           <h2>Lleva tu estetica a una experiencia mas ordenada, moderna y profesional.</h2>
           <ul className="cta-points">
-            {/*
-            Mostra tu marca en{' '}
-            <strong>nombredetumarca.misturnosapp.com.ar</strong> y ofrece una
-            experiencia profesional con turnos online, señas, recordatorios por
-            WhatsApp y agenda organizada por gabinete. Si el servicio esta en
-            modo automatico, el cliente elige un horario disponible, paga con
-            Mercado Pago y el turno se confirma sin intervencion manual. Tambien
-            podes ofrecer descuentos por pago en efectivo para fomentar ese
-            metodo y hacerlo mas conveniente para tu cliente.
-            */}
             <li>
               Mostra tu marca en <strong>nombredetumarca.misturnosapp.com.ar</strong> y
               ofrece una experiencia profesional desde el primer click.
             </li>
             <li>
-              Organiza turnos online, senas, recordatorios por WhatsApp y agenda
+              Organiza turnos online, señas, recordatorios por WhatsApp y agenda
               por gabinete en un solo lugar.
             </li>
             <li>
@@ -609,9 +592,9 @@ function AdminPanel({
           <div className="eyebrow">Panel interno</div>
           <h1>Administra las imagenes reales que aparecen en la landing</h1>
           <p className="hero-text">
-            Carga screenshots desde tu computadora o pega una URL. Todo se guarda
-            en este navegador y se muestra automaticamente en la seccion de
-            imagenes de la web.
+            Carga screenshots reales de tu app desde tu computadora o pega una
+            URL. Todo se guarda en este navegador y se muestra automaticamente
+            en la landing y dentro del hero.
           </p>
         </div>
 
@@ -620,7 +603,7 @@ function AdminPanel({
             Volver a la landing
           </a>
           <button className="primary-action admin-button" type="button" onClick={resetGallery}>
-            Restaurar ejemplos
+            Limpiar galeria
           </button>
         </div>
       </section>
