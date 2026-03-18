@@ -16,6 +16,7 @@ type BrandSettings = {
 
 const STORAGE_KEY = 'misturnosapp-gallery'
 const BRAND_STORAGE_KEY = 'misturnosapp-brand'
+const FAVICON_URL = '/img/favicon.png'
 
 const defaultGallery: GalleryImage[] = []
 
@@ -31,7 +32,7 @@ const highlights = [
   'Costo fijo del sistema en 0 y cobro por uso en cada turno con seña',
   'Mercado Pago integrado para cobrar señas y agilizar reservas',
   'Descuentos por pago en efectivo para incentivar ese medio de cobro',
-  'Si el servicio es automatizado, el cliente reserva, paga y confirma solo',
+  'Si el servicio es automatizado, el cliente reserva, paga y confirma sin necesidad de intervenir',
 ]
 
 const metrics = [
@@ -53,7 +54,7 @@ const featureGroups = [
       'Reservas manuales o coordinadas por WhatsApp',
       'Perfil de usuario y panel de Mis turnos',
       'Reprogramacion y cancelacion de turnos',
-      'Aviso en cada reserva y confirmacion de estados',
+      'Aviso en cada reserva y confirmación de estados',
     ],
   },
   {
@@ -62,8 +63,8 @@ const featureGroups = [
       'Gestion de señas y pagos online',
       'Integracion con Mercado Pago',
       'Descuentos por pago en efectivo para incentivar ese metodo',
-      'Confirmacion de pagos y estados de reserva',
-      'Servicios automatizados con confirmacion inmediata',
+      'Confirmación de pagos y estados de reserva',
+      'Servicios automatizados con confirmación inmediata',
       'Recordatorios automaticos de turnos por WhatsApp',
       'Integracion con WhatsApp para atencion rapida',
       'Permite confirmar turnos antes de atender',
@@ -88,51 +89,50 @@ const featureGroups = [
 
 const businessBenefits = [
   'No se cobra adicional por sumar profesionales, gabinetes ni servicios.',
-  'El costo fijo del sistema es 0 y se paga por cada turno que efectivamente lleva seña.',
+  'El costo del sistema es $0 y se cobra costo de servicio, que abona el cliente.',
   'Automatiza la toma de turnos sin depender de mensajes manuales.',
   'Permite que el cliente vea la agenda, elija, pague con Mercado Pago y confirme solo.',
-  'Se adapta a cada negocio con servicios configurables desde un precio base y complementos variables.',
+  'Permite ingresar precio base y cobrar adicionales por servicios complementarios.',
   'Permite ofrecer descuentos por pago en efectivo para fomentar ese metodo cuando te conviene.',
   'Reduce ausencias con reservas mas claras, señas previas y recordatorios.',
   'Mejora la organizacion de agenda, profesionales, gabinetes y espacios.',
   'Arma agendas reales segun el gabinete disponible y el horario de cada servicio.',
   'Centraliza clientes, servicios, pagos y reservas en un solo lugar.',
-  'Da una imagen mas profesional, moderna y lista para vender.',
 ]
 
 const clientBenefits = [
-  'Reservan en pocos pasos desde el celular.',
-  'Si el servicio esta automatizado, el turno se confirma sin esperar respuesta.',
-  'Ven precios, duracion y opciones antes de elegir.',
+  'Reservan en pocos pasos desde el celular o pc.',
+  'Si el servicio esta automatizado, el turno se confirma sin requerir confirmación manual.',
+  'Se muestra un resumen completo del servicio y turno antes de confirmar.',
   'Pueden aprovechar descuentos si eligen pagar en efectivo.',
   'Tienen claridad sobre pagos, señas y saldo pendiente.',
   'Acceden a sus turnos, cambios y datos cuando quieren.',
-  'Encuentran rapido ubicacion, horarios y contacto.',
+  'Encuentran rapido ubicación, horarios y contacto.',
   'Viven una experiencia mas comoda, rapida y confiable.',
 ]
 
 const steps = [
   {
-    title: 'Mostras una imagen profesional',
+    title: 'Mostrar una imagen profesional',
     description:
       'Tu centro puede verse ordenado, moderno y confiable desde el primer click.',
   },
   {
-    title: 'Tus clientes reservan sin friccion',
+    title: 'Tus clientes reservan sin fricción',
     description:
       'Eligen servicio, profesional, horario y seña en una experiencia simple y clara.',
   },
   {
-    title: 'Tu equipo trabaja con mas orden',
+    title: 'Mejora la organizacion interna',
     description:
-      'El sistema organiza agenda, gabinetes, pagos y recordatorios para que vendas mejor.',
+      'El sistema organiza agenda, gabinetes, pagos y recordatorios.',
   },
 ]
 
 const audiences = [
-  'Centros de estetica, unas, cejas, pestanas y beauty studios',
+  'Centros de estetica, uñas, cejas, pestanas y beauty studios',
   'Depilacion definitiva, cosmetologia y tratamientos faciales o corporales',
-  'Negocios con agenda por profesional, gabinete, cabina o espacio de atencion',
+  'Negocios con agenda por profesional, gabinete, cabina o espacio de atención',
 ]
 
 const sectionIndex = [
@@ -189,6 +189,13 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem(BRAND_STORAGE_KEY, JSON.stringify(brand))
   }, [brand])
+
+  useEffect(() => {
+    const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]')
+    if (favicon) {
+      favicon.href = FAVICON_URL
+    }
+  }, [])
 
   if (isAdmin) {
     return (
@@ -278,7 +285,12 @@ function LandingPage({
             <span />
             <span />
             <span />
-            <img className="browser-favicon" src="/favicon.svg" alt="" aria-hidden="true" />
+            <img
+              className="browser-favicon"
+              src={brand.logoUrl || defaultBrand.logoUrl}
+              alt=""
+              aria-hidden="true"
+            />
             <p>centrobelleza.misturnosapp.com.ar</p>
           </div>
 
@@ -317,7 +329,7 @@ function LandingPage({
                 <strong>5 agendas</strong>
               </article>
               <article>
-                <span>Confirmacion</span>
+                <span>Confirmación</span>
                 <strong>Automatica</strong>
               </article>
             </div>
@@ -349,9 +361,9 @@ function LandingPage({
       <section className="content-section" id="funciones">
         <div className="section-heading">
           <span className="section-kicker">Todo lo que incluye</span>
-          <h2>Todo lo que una estetica necesita para vender y atender mejor</h2>
+          <h2>Brinda un servicio de calidad</h2>
           <p className="section-text">
-            Desde la reserva hasta la confirmacion del pago, el sistema acompana
+            Desde la reserva hasta la confirmación del pago, el sistema acompaña
             todo el recorrido del cliente y toda la operacion interna del centro.
           </p>
         </div>
@@ -403,7 +415,7 @@ function LandingPage({
       <section className="content-section" id="como-funciona">
         <div className="section-heading">
           <span className="section-kicker">Como transforma tu operacion</span>
-          <h2>Del desorden por mensajes a una agenda profesional que acompana tu crecimiento</h2>
+          <h2>Del desorden por mensajes a una agenda profesional que acompaña tu crecimiento</h2>
         </div>
 
         <div className="steps-grid">
