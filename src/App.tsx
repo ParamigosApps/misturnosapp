@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, SyntheticEvent, useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 type GalleryImage = {
@@ -6,6 +6,7 @@ type GalleryImage = {
   title: string
   description: string
   imageUrl: string
+  layout?: 'wide' | 'standard' | 'tall'
 }
 
 type BrandSettings = {
@@ -16,132 +17,145 @@ type BrandSettings = {
 
 const STORAGE_KEY = 'misturnosapp-gallery'
 const BRAND_STORAGE_KEY = 'misturnosapp-brand'
-const FAVICON_URL = '/img/favicon.png'
+const LOGO_ASSET_VERSION = '2026-03-26'
+const FAVICON_URL = `/img/favicon.png?v=${LOGO_ASSET_VERSION}`
+const DEFAULT_LOGO_URL = `/img/favicon.png?v=${LOGO_ASSET_VERSION}`
+const BRAND_DISPLAY_NAME = 'misturnosApp'
+const OLD_BRAND_TAGLINE = 'Sistema de turnos listo para vender como experiencia digital profesional'
+const NEW_BRAND_TAGLINE = 'Sistema de agendas inteligente para Centros de Esteticas.'
 
 const defaultGallery: GalleryImage[] = []
 
+const siteGallery: GalleryImage[] = [
+  {
+    id: 'home',
+    title: 'Inicio del sistema',
+    description: 'Vista principal con acceso rapido a turnos y acciones clave.',
+    imageUrl: '/img/home.jpg',
+    layout: 'wide',
+  },
+  {
+    id: 'agenda-1',
+    title: 'Categorias y servicios',
+    description: 'Organización de categorias para encontrar y reservar tus turnos rapidamente.',
+    imageUrl: '/img/categorias.jpg',
+    layout: 'standard',
+  },
+  {
+    id: 'agenda-2',
+    title: 'Agenda detallada',
+    description: 'Detalle de los servicios, profesionales, costos, duración, items seleccionables, tipo de confirmación, ect.',
+    imageUrl: '/img/agenda%202.jpg',
+    layout: 'standard',
+  },
+  {
+    id: 'agenda-3',
+    title: 'Agenda por bloques',
+    description: 'Vista detallada del servicio a reservar.',
+    imageUrl: '/img/agenda%203.jpg',
+    layout: 'tall',
+  },
+  {
+    id: 'panel-derecho-1',
+    title: 'Sección ubicación',
+    description: 'Detalle de la ubicación del servicio.',
+    imageUrl: '/img/panel%20derecho%201.jpg',
+    layout: 'tall',
+  },
+  {
+    id: 'panel-derecho-2',
+    title: 'Seccion redes sociales',
+    description: 'Redes sociales al alcance.',
+    imageUrl: '/img/panel%20derecho%202.jpg',
+    layout: 'tall',
+  },
+  {
+    id: 'panel-derecho-3',
+    title: 'Sección de Profesionales',
+    description: 'Añade profesionales sin ningun costo.',
+    imageUrl: '/img/panel%20derecho%203.jpg',
+    layout: 'tall',
+  },
+  {
+    id: 'resenas',
+    title: 'Reseñas',
+    description: 'Mostrá en tu web las reseñas reales de Google y en tiempo real.',
+    imageUrl: '/img/resenas.jpg',
+    layout: 'wide',
+  },
+]
+
+const adminScreens: GalleryImage[] = [
+  {
+    id: 'admin-clientes-1',
+    title: 'Admin clientes',
+    description: 'Gestion de clientes, datos principales e historial.',
+    imageUrl: '/img/admin%20clientes%201.jpg',
+    layout: 'standard',
+  },
+  {
+    id: 'admin-configuraciones',
+    title: 'Admin configuraciones',
+    description: 'Ajustes generales del sistema, realiza ajustes a preferencia.',
+    imageUrl: '/img/admin%20configuraciones.jpg',
+    layout: 'standard',
+  },
+  {
+    id: 'admin-servicios',
+    title: 'Crea servicios totalmente personalizados',
+    description: 'Configuración de servicios, horarios, fechas, duraciones, precios, profesionales, items añadibles y muchisimo más.',
+    imageUrl: '/img/admin%20servicios.jpg',
+    layout: 'standard',
+  },
+  {
+    id: 'admin-turnos-1',
+    title: 'Admin sección turnos',
+    description: 'Vista de control para gestion de turnos. ',
+    imageUrl: '/img/admin%20turnos%201.jpg',
+    layout: 'standard',
+  },
+  {
+    id: 'admin-turnos-2',
+    title: 'Admin sección turnos',
+    description: 'Seguimiento de estados y acciones de turnos. Aproba, rechaza, reprograma, marca pagos, marca asistencias, cancelaciones, ect.',
+    imageUrl: '/img/admin%20turnos%202.jpg',
+    layout: 'standard',
+  },
+]
+
 const defaultBrand: BrandSettings = {
-  logoUrl: '/logo.png',
-  brandName: 'Turnos online para esteticas',
-  tagline: 'Turnos online, señas y gestion profesional para centros de estetica que quieren crecer.',
+  logoUrl: DEFAULT_LOGO_URL,
+  brandName: BRAND_DISPLAY_NAME,
+  tagline: NEW_BRAND_TAGLINE,
 }
 
-const highlights = [
-  'Sin costo extra por agregar profesionales, gabinetes o nuevos servicios',
-  'Cada servicio puede tener precio base y variables complementarias para adaptarse a cada caso',
-  'Costo fijo del sistema en 0 y cobro por uso en cada turno con seña',
-  'Mercado Pago integrado para cobrar señas y agilizar reservas',
-  'Descuentos por pago en efectivo para incentivar ese medio de cobro',
-  'Si el servicio es automatizado, el cliente reserva, paga y confirma sin necesidad de intervenir',
-]
-
-const metrics = [
-  { value: '$0', label: 'costo fijo por sumar servicios, gabinetes o profesionales' },
-  { value: '24/7', label: 'reservas disponibles incluso fuera de horario' },
-  { value: '100%', label: 'flexible, permite adaptar las agendas a nececesidad' },
-]
-
-const featureGroups = [
+const heroBenefits = [
   {
-    title: 'Reservas y experiencia del cliente',
-    items: [
-      'Reserva de turnos online 24/7',
-      'Buscador de servicios por nombre o categoria',
-      'Seleccion de profesional dentro de cada servicio',
-      'Visualizacion de precios, duracion y detalles antes de reservar',
-      'Servicios con precio base y variables complementarias segun cada necesidad',
-      'Disponibilidad armada segun gabinete y horario del servicio',
-      'Reservas manuales o coordinadas por WhatsApp',
-      'Perfil de usuario y panel de Mis turnos',
-      'Reprogramacion y cancelacion de turnos',
-      'Aviso en cada reserva y confirmación de estados',
-    ],
+    title: 'Sin costo mensual',
+    description: 'Se cobra un pequeño recargo al cliente al momento de reservar.',
   },
   {
-    title: 'Pagos, señas y automatizacion',
-    items: [
-      'Gestion de señas y pagos online',
-      'Integracion con Mercado Pago',
-      'Descuentos por pago en efectivo para incentivar ese metodo',
-      'Confirmación de pagos y estados de reserva',
-      'Servicios automatizados con confirmación inmediata',
-      'Recordatorios automaticos de turnos por WhatsApp',
-      'Integracion con WhatsApp para atencion rapida',
-      'Permite confirmar turnos antes de atender',
-      'Reduce ausencias con reservas mas claras y compromiso previo',
-    ],
+    title: 'Agenda adaptable',
+    description: 'Gran diversidad de variables para que se puedas adaptarlo a tus necesidades.',
+  },
+    {
+    title: 'Confirmación inmediata o con aprobación manual',
+    description: 'Cada agenda permite configurar su propio proceso de confirmación.',
   },
   {
-    title: 'Operacion del negocio',
-    items: [
-      'Panel administrativo para servicios',
-      'Panel administrativo para clientes',
-      'Panel administrativo para turnos y reservas',
-      'Gestion de gabinetes o espacios de atencion',
-      'Configuracion general del negocio',
-      'Panel para liquidaciones',
-      'Agenda exclusiva para profesionales',
-      'Configuracion de agendas en base a gabinetes y horarios por servicio',
-      'Mapa, horarios, profesionales y reseñas integradas en la home',
-    ],
+    title: 'Menos ausencias',
+    description: 'Recordatorios de turnos por WhatsApp para reducir ausencias.',
   },
-]
 
-const businessBenefits = [
-  'No se cobra adicional por sumar profesionales, gabinetes ni servicios.',
-  'El costo del sistema es $0 y se cobra costo de servicio, que abona el cliente.',
-  'Automatiza la toma de turnos sin depender de mensajes manuales.',
-  'Permite que el cliente vea la agenda, elija, pague con Mercado Pago y confirme solo.',
-  'Permite ingresar precio base y cobrar adicionales por servicios complementarios.',
-  'Permite ofrecer descuentos por pago en efectivo para fomentar ese metodo cuando te conviene.',
-  'Reduce ausencias con reservas mas claras, señas previas y recordatorios.',
-  'Mejora la organizacion de agenda, profesionales, gabinetes y espacios.',
-  'Arma agendas reales segun el gabinete disponible y el horario de cada servicio.',
-  'Centraliza clientes, servicios, pagos y reservas en un solo lugar.',
-]
-
-const clientBenefits = [
-  'Reservan en pocos pasos desde el celular o pc.',
-  'Si el servicio esta automatizado, el turno se confirma sin requerir confirmación manual.',
-  'Se muestra un resumen completo del servicio y turno antes de confirmar.',
-  'Pueden aprovechar descuentos si eligen pagar en efectivo.',
-  'Tienen claridad sobre pagos, señas y saldo pendiente.',
-  'Acceden a sus turnos, cambios y datos cuando quieren.',
-  'Encuentran rapido ubicación, horarios y contacto.',
-  'Viven una experiencia mas comoda, rapida y confiable.',
-]
-
-const steps = [
-  {
-    title: 'Mostrar una imagen profesional',
-    description:
-      'Tu centro puede verse ordenado, moderno y confiable desde el primer click.',
+    {
+    title: 'Sin limitaciones',
+    description: 'Añade profesionales y servicios sin limites.',
   },
   {
-    title: 'Tus clientes reservan sin fricción',
-    description:
-      'Eligen servicio, profesional, horario y seña en una experiencia simple y clara.',
+    title: 'Panel simple',
+    description: 'Visual y facil de usar para tu equipo, incluso sin experiencia tecnica.',
   },
-  {
-    title: 'Mejora la organizacion interna',
-    description:
-      'El sistema organiza agenda, gabinetes, pagos y recordatorios.',
-  },
-]
 
-const audiences = [
-  'Centros de estetica, uñas, cejas, pestanas y beauty studios',
-  'Depilacion definitiva, cosmetologia y tratamientos faciales o corporales',
-  'Negocios con agenda por profesional, gabinete, cabina o espacio de atención',
-]
-
-const sectionIndex = [
-  { href: '#inicio', label: 'Inicio' },
-  { href: '#funciones', label: 'Funciones' },
-  { href: '#beneficios-negocio', label: 'Negocio' },
-  { href: '#beneficios-clientes', label: 'Clientes' },
-  { href: '#como-funciona', label: 'Como se vende' },
-  { href: '#contacto', label: 'Contacto' },
 ]
 
 function readStoredGallery(): GalleryImage[] {
@@ -167,10 +181,22 @@ function readStoredBrand(): BrandSettings {
 
   try {
     const parsed = JSON.parse(raw) as Partial<BrandSettings>
+    const normalizedLogoUrl =
+      parsed.logoUrl?.trim() &&
+      parsed.logoUrl.trim() !== '/logo.png' &&
+      parsed.logoUrl.trim() !== '/img/favicon.png'
+        ? parsed.logoUrl.trim()
+        : DEFAULT_LOGO_URL
+    const rawBrandName = parsed.brandName?.trim() || defaultBrand.brandName
+    const normalizedBrandName = /^misturnosapp$/i.test(rawBrandName) ? BRAND_DISPLAY_NAME : rawBrandName
+
+    const rawTagline = parsed.tagline?.trim() || defaultBrand.tagline
+    const normalizedTagline = rawTagline === OLD_BRAND_TAGLINE ? NEW_BRAND_TAGLINE : rawTagline
+
     return {
-      logoUrl: parsed.logoUrl?.trim() || defaultBrand.logoUrl,
-      brandName: parsed.brandName?.trim() || defaultBrand.brandName,
-      tagline: parsed.tagline?.trim() || defaultBrand.tagline,
+      logoUrl: normalizedLogoUrl,
+      brandName: normalizedBrandName,
+      tagline: normalizedTagline,
     }
   } catch {
     return defaultBrand
@@ -192,9 +218,7 @@ function App() {
 
   useEffect(() => {
     const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]')
-    if (favicon) {
-      favicon.href = FAVICON_URL
-    }
+    if (favicon) favicon.href = FAVICON_URL
   }, [])
 
   if (isAdmin) {
@@ -218,290 +242,235 @@ function LandingPage({
   gallery: GalleryImage[]
   brand: BrandSettings
 }) {
-  const featuredImage = gallery[0]
+  const hasCustomGallery = gallery.length > 0
+  const [featureAspectRatios, setFeatureAspectRatios] = useState<Record<string, number>>({})
+  const homeFeature = siteGallery.find((item) => item.id === 'home')
+  const agendaFeatures = siteGallery.filter((item) => item.id.startsWith('agenda-'))
+  const panelFeatures = siteGallery.filter((item) => item.id.startsWith('panel-derecho-'))
+  const otherFeatures = siteGallery.filter(
+    (item) => item.id !== 'home' && !item.id.startsWith('agenda-') && !item.id.startsWith('panel-derecho-'),
+  )
+  const adminTurnosScreens = adminScreens.filter((item) => item.id.startsWith('admin-turnos-'))
+  const adminMainScreens = adminScreens.filter((item) => !item.id.startsWith('admin-turnos-'))
+
+  const onFeatureImageLoad = (id: string) => (event: SyntheticEvent<HTMLImageElement>) => {
+    const { naturalWidth, naturalHeight } = event.currentTarget
+    if (!naturalWidth || !naturalHeight) return
+
+    const aspectRatio = naturalWidth / naturalHeight
+
+    setFeatureAspectRatios((current) => {
+      const previous = current[id]
+      if (previous && Math.abs(previous - aspectRatio) < 0.01) return current
+      return { ...current, [id]: aspectRatio }
+    })
+  }
+
+  const getFeatureLayoutClass = (id: string) => {
+    const ratio = featureAspectRatios[id]
+    if (!ratio) return 'feature-item--standard'
+    if (ratio >= 1.3) return 'feature-item--wide'
+    if (ratio <= 0.85) return 'feature-item--tall'
+    return 'feature-item--standard'
+  }
 
   return (
     <main className="landing-shell">
-      <section className="brand-banner">
-        <div className="brand-lockup">
+      <header className="topbar" id="inicio">
+        <div className="brand-row">
           <div className="brand-logo-box">
             {brand.logoUrl ? (
-              <img className="brand-logo-image" src={brand.logoUrl} alt={brand.brandName} />
+              <img
+                className="brand-logo-image"
+                src={brand.logoUrl}
+                alt={brand.brandName}
+                onError={(event) => {
+                  if (event.currentTarget.src.includes('/img/favicon.png')) return
+                  event.currentTarget.src = DEFAULT_LOGO_URL
+                }}
+              />
             ) : (
               <span className="brand-logo-placeholder">Logo</span>
             )}
           </div>
 
           <div className="brand-copy">
-            <span className="brand-kicker">Software para centros de estetica</span>
+            <strong>{brand.brandName}</strong>
             <span>{brand.tagline}</span>
           </div>
         </div>
-      </section>
+      </header>
 
-      <nav className="section-index" aria-label="Indice de secciones">
-        {sectionIndex.map((item) => (
-          <a key={item.href} href={item.href}>
-            {item.label}
+      <section className="hero hero--compact">
+        <p className="eyebrow">Presentacion</p>
+        <h1>Agenda profesional diseñada para centros de estetica</h1>
+        <p className="hero-text">
+          Nos ocupamos de la parte tecnica para que puedas enfocarte en tu negocio. Te ayudamos a mostrar tu disponibilidad, gestionar tus turnos reducciendo considerablemente la cantidad de mensajes por responder, todo con una experiencia simple y directa para tus clientes.
+        </p>
+        <div className="hero-benefits">
+          {heroBenefits.map((benefit, index) => (
+            <article
+              key={benefit.title}
+              className={`benefit-item ${index === 0 ? 'benefit-item--featured' : ''} ${heroBenefits.length % 2 === 1 && index === heroBenefits.length - 1 ? 'benefit-item--full' : ''}`}
+            >
+              <span className="benefit-badge">{String(index + 1).padStart(2, '0')}</span>
+              <h3 className="benefit-title">{benefit.title.toUpperCase()}</h3>
+              <p>{benefit.description}</p>
+            </article>
+          ))}
+        </div>
+        <div className="hero-actions">
+          <a className="primary-action" href="https://wa.me/541130580879" target="_blank" rel="noreferrer">
+            Contacto por WhatsApp
           </a>
-        ))}
-      </nav>
-
-      <section className="hero-section" id="inicio">
-        <div className="hero-copy">
-          <div className="eyebrow">Sistema de turnos para centros de estetica</div>
-          <h1>Haz que tu centro se vea mas profesional y optimiza tu agenda.</h1>
-          <p className="hero-text">
-            Fue creado para resolver los problemas de organizacion en esteticas
-            que quieren ordenar su agenda, cobrar señas, mostrar mejor sus
-            servicios y dar una experiencia moderna desde el celular. Ademas,
-            cada servicio se puede armar con un precio base y sumar variables
-            complementarias para adaptarse mejor a lo que realmente ofrece tu
-            centro. Si el servicio esta marcado como automatizado, el cliente ve
-            la agenda, elige turno, paga con Mercado Pago y la reserva se
-            confirma sin necesidad de intervenir. Tambien podes ofrecer
-            descuentos por pago en efectivo para fomentar ese metodo y hacerlo
-            mas atractivo para tus clientes.
-          </p>
-
-          <div className="hero-actions">
-            <a className="primary-action" href="#contacto">
-              Quiero llevarlo a mi centro
-            </a>
-            <a className="secondary-action" href="#funciones">
-              Ver todo lo que incluye
-            </a>
-          </div>
-
-          <ul className="hero-highlights" aria-label="Beneficios principales">
-            {highlights.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
         </div>
-
-        <div className="hero-card">
-          <div className="browser-bar">
-            <span />
-            <span />
-            <span />
-            <img
-              className="browser-favicon"
-              src={brand.logoUrl || defaultBrand.logoUrl}
-              alt=""
-              aria-hidden="true"
-            />
-            <p>centrobelleza.misturnosapp.com.ar</p>
-          </div>
-
-          <div className="hero-card-content">
-            <div className="brand-chip">Centro Bella Studio</div>
-
-            {featuredImage ? (
-              <article className="hero-image-card">
-                <img src={featuredImage.imageUrl} alt={featuredImage.title} />
-                <div className="hero-image-copy">
-                  <span className="panel-label">Captura real de la app</span>
-                  <strong>{featuredImage.title}</strong>
-                  <p>{featuredImage.description}</p>
-                </div>
-              </article>
-            ) : (
-              <article className="hero-image-card hero-image-empty">
-                <div className="hero-image-copy">
-                  <span className="panel-label">Captura real de la app</span>
-                  <strong>Este espacio esta listo para mostrar screenshots reales</strong>
-                  <p>
-                    Carga imagenes reales desde <strong>/admin</strong> y se van a ver aca
-                    automaticamente en el hero.
-                  </p>
-                </div>
-              </article>
-            )}
-
-            <div className="availability-grid">
-              <article>
-                <span>Servicios</span>
-                <strong>32 activos</strong>
-              </article>
-              <article>
-                <span>Profesionales</span>
-                <strong>5 agendas</strong>
-              </article>
-              <article>
-                <span>Confirmación</span>
-                <strong>Automatica</strong>
-              </article>
-            </div>
-
-            <div className="insight-card">
-              <span className="panel-label">Pensado para esteticas</span>
-              <strong>Mas orden, mejor imagen y menos tiempo coordinando</strong>
-              <p>
-                Tu centro puede mostrar servicios, profesionales, precios, señas
-                y horarios de forma clara. Si el servicio es automatizado, el
-                cliente paga con Mercado Pago y queda confirmado al instante.
-                Tambien podes impulsar pagos en efectivo con descuentos visibles
-                para fomentar ese metodo.
-              </p>
-            </div>
-          </div>
-        </div>
+        <p className="hero-caption">Respuesta directa por WhatsApp para mostrarte una demo personalizada.</p>
       </section>
 
-      <section className="metrics-section" aria-label="Indicadores de valor">
-        {metrics.map((metric) => (
-          <article key={metric.label} className="metric-card">
-            <strong>{metric.value}</strong>
-            <span>{metric.label}</span>
-          </article>
-        ))}
-      </section>
-
-      <section className="content-section" id="funciones">
-        <div className="section-heading">
-          <span className="section-kicker">Todo lo que incluye</span>
-          <h2>Brinda un servicio de calidad</h2>
-          <p className="section-text">
-            Desde la reserva hasta la confirmación del pago, el sistema acompaña
-            todo el recorrido del cliente y toda la operacion interna del centro.
-          </p>
+      <section className="gallery-section" id="como-funciona">
+        <div className="section-title-row">
+          <p className="eyebrow">Layout de pantallas</p>
+          <h2>Todas las imagenes del sistema</h2>
+          {hasCustomGallery ? <p className="gallery-note">Imagenes cargadas en admin: {gallery.length}</p> : null}
         </div>
 
-        <div className="feature-groups">
-          {featureGroups.map((group) => (
-            <article key={group.title} className="feature-group-card">
-              <h3>{group.title}</h3>
-              <ul>
-                {group.items.map((item) => (
-                  <li key={item}>{item}</li>
+        <div className="feature-sections">
+          {homeFeature ? (
+            <article key={homeFeature.id} className="feature-item feature-item--home feature-item--wide">
+              <div className="feature-image-box">
+                <img src={homeFeature.imageUrl} alt={homeFeature.title} onLoad={onFeatureImageLoad(homeFeature.id)} />
+              </div>
+              <div className="feature-copy">
+                <span className="feature-index">01</span>
+                <h3>{homeFeature.title}</h3>
+                <p>{homeFeature.description}</p>
+              </div>
+            </article>
+          ) : null}
+
+          {agendaFeatures.length > 0 ? (
+            <section className="agenda-group">
+              <div className="agenda-group-header">
+                <span className="feature-index">02</span>
+                <h3>Pantallas de agenda</h3>
+              </div>
+              <div className="agenda-group-grid">
+                {agendaFeatures.map((item) => (
+                  <article key={item.id} className={`agenda-card ${getFeatureLayoutClass(item.id)}`}>
+                    <div className="feature-image-box">
+                      <img src={item.imageUrl} alt={item.title} onLoad={onFeatureImageLoad(item.id)} />
+                    </div>
+                    <div className="feature-copy">
+                      <h4>{item.title}</h4>
+                      <p>{item.description}</p>
+                    </div>
+                  </article>
                 ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </section>
+              </div>
+            </section>
+          ) : null}
 
-      <section className="content-section" id="beneficios-negocio">
-        <div className="section-heading">
-          <span className="section-kicker">Beneficios para el negocio</span>
-          <h2>Una herramienta pensada para vender mas y ordenar el dia a dia del centro</h2>
-        </div>
+          {panelFeatures.length > 0 ? (
+            <section className="panel-group">
+              <div className="panel-group-header">
+                <span className="feature-index">03</span>
+                <h3>Panel derecho</h3>
+              </div>
+              <div className="panel-group-grid">
+                {panelFeatures.map((item) => (
+                  <article key={item.id} className={`panel-card ${getFeatureLayoutClass(item.id)}`}>
+                    <div className="feature-image-box">
+                      <img src={item.imageUrl} alt={item.title} onLoad={onFeatureImageLoad(item.id)} />
+                    </div>
+                    <div className="feature-copy">
+                      <h4>{item.title}</h4>
+                      <p>{item.description}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
-        <div className="benefit-grid">
-          {businessBenefits.map((benefit) => (
-            <article key={benefit} className="benefit-card">
-              <p>{benefit}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="content-section" id="beneficios-clientes">
-        <div className="section-heading">
-          <span className="section-kicker">Beneficios para tus clientes</span>
-          <h2>Una experiencia simple, prolija y confiable para reservar sin friccion</h2>
-        </div>
-
-        <div className="benefit-grid client-grid">
-          {clientBenefits.map((benefit) => (
-            <article key={benefit} className="benefit-card">
-              <p>{benefit}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="content-section" id="como-funciona">
-        <div className="section-heading">
-          <span className="section-kicker">Como transforma tu operacion</span>
-          <h2>Del desorden por mensajes a una agenda profesional que acompaña tu crecimiento</h2>
-        </div>
-
-        <div className="steps-grid">
-          {steps.map((step, index) => (
-            <article key={step.title} className="step-card">
-              <span className="step-number">0{index + 1}</span>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="content-section audience-section">
-        <div className="section-heading narrow">
-          <span className="section-kicker">Ideal para</span>
-          <h2>Espacios de belleza que quieren una experiencia mas premium y mas control interno</h2>
-        </div>
-
-        <div className="audience-list">
-          {audiences.map((audience) => (
-            <article key={audience} className="audience-card">
-              <p>{audience}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="cta-section" id="contacto">
-        <div className="cta-copy">
-          <span className="section-kicker">Lista para crecer</span>
-          <h2>Lleva tu estetica a una experiencia mas ordenada, moderna y profesional.</h2>
-          <ul className="cta-points">
-            <li>
-              Mostra tu marca en <strong>nombredetumarca.misturnosapp.com.ar</strong> y
-              ofrece una experiencia profesional desde el primer click.
-            </li>
-            <li>
-              Organiza turnos online, señas, recordatorios por WhatsApp y agenda
-              por gabinete en un solo lugar.
-            </li>
-            <li>
-              Si el servicio esta en modo automatico, el cliente elige horario,
-              paga con Mercado Pago y el turno se confirma sin intervencion manual.
-            </li>
-            <li>
-              Tambien podes ofrecer descuentos por pago en efectivo para fomentar
-              ese metodo y volverlo mas atractivo para tu cliente.
-            </li>
-          </ul>
-        </div>
-
-        <div className="contact-card">
-          <div className="contact-intro">
-            <span className="contact-badge">Contacto directo</span>
-            <h3>Comunicate y conoce como adaptarlo a tu centro</h3>
-          </div>
-
-          <div className="contact-row">
-            <span className="contact-label">WhatsApp</span>
-            <a
-              className="contact-link"
-              href="https://wa.me/541130580879"
-              target="_blank"
-              rel="noreferrer"
+          {otherFeatures.map((item, index) => (
+            <article
+              key={item.id}
+              className={`feature-item ${getFeatureLayoutClass(item.id)} ${index % 2 === 1 ? 'feature-item--reverse' : ''} ${item.id === 'resenas' ? 'feature-item--resenas' : ''}`}
             >
-              Ivan Ruiz - 11 3058-0879
-            </a>
-          </div>
-          <div className="contact-row">
-            <span className="contact-label">Email</span>
-            <a className="contact-link" href="mailto:ivangabrielruiz1@gmail.com">
-              ivangabrielruiz1@gmail.com
-            </a>
-          </div>
+              <div className="feature-image-box">
+                <img src={item.imageUrl} alt={item.title} onLoad={onFeatureImageLoad(item.id)} />
+              </div>
+              <div className="feature-copy">
+                <span className="feature-index">{String(index + 4).padStart(2, '0')}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
 
-          <div className="cta-stack">
-            <a
-              className="primary-action cta-action"
-              href="https://wa.me/541130580879"
-              target="_blank"
-              rel="noreferrer"
-            >
+      <section className="gallery-section" id="imagenes-admin">
+        <div className="section-title-row">
+          <p className="eyebrow">Sección Admin</p>
+          <h2>Pantallas de administración</h2>
+        </div>
+
+        <div className="gallery-grid">
+          {adminMainScreens.map((item, index) => (
+            <article key={item.id} className={`gallery-card gallery-card--${item.layout ?? 'standard'}`}>
+              <img src={item.imageUrl} alt={item.title} />
+              <div className="gallery-copy">
+                <span className="step-tag">Admin {String(index + 1).padStart(2, '0')}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+            </article>
+          ))}
+
+          {adminTurnosScreens.length > 0 ? (
+            <article className="gallery-card gallery-card--wide admin-turnos-card">
+              <div className="admin-turnos-grid">
+                {adminTurnosScreens.map((item) => (
+                  <div key={item.id} className="admin-turnos-image-wrap">
+                    <img src={item.imageUrl} alt={item.title} />
+                  </div>
+                ))}
+              </div>
+              <div className="gallery-copy">
+                <span className="step-tag">Admin {String(adminMainScreens.length + 1).padStart(2, '0')}</span>
+                <h3>Admin sección turnos</h3>
+                <p>
+                  Vista unificada de turnos con control operativo: aproba, rechaza, reprograma, marca pagos y gestiona
+                  asistencias/cancelaciones desde una misma sección.
+                </p>
+              </div>
+            </article>
+          ) : null}
+        </div>
+      </section>
+
+
+      <section className="contact-section" id="contacto">
+        <div className="contact-copy">
+          <p className="eyebrow">Proximo paso</p>
+          <h2>¿Te interesa implementarlo en tu centro?</h2>
+          <p>
+            Tenelo listo en solo unos días.
+          </p>
+          <div className="contact-points">
+            <span>Puesta en marcha guiada</span>
+            <span>Sin costo mensuales</span>
+          </div>
+        </div>
+        <div className="contact-cta-card">
+          <strong>Comunicate con nosotros</strong>
+          <p>Despeja tus dudas por WhatsApp.</p>
+          <div className="contact-actions">
+            <a className="primary-action" href="https://wa.me/541130580879" target="_blank" rel="noreferrer">
               Hablar por WhatsApp
             </a>
-            <a className="secondary-action cta-action" href="mailto:ivangabrielruiz1@gmail.com">
+            <a className="secondary-action" href="mailto:ivangabrielruiz1@gmail.com">
               Enviar email
             </a>
           </div>
@@ -525,6 +494,7 @@ function AdminPanel({
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+
   const [logoUrl, setLogoUrl] = useState(brand.logoUrl)
   const [brandName, setBrandName] = useState(brand.brandName)
   const [tagline, setTagline] = useState(brand.tagline)
@@ -557,13 +527,13 @@ function AdminPanel({
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!title.trim() || !description.trim() || !imageUrl.trim()) return
+    if (!imageUrl.trim()) return
 
     setGallery((current) => [
       {
         id: crypto.randomUUID(),
-        title: title.trim(),
-        description: description.trim(),
+        title: title.trim() || 'Nueva pantalla',
+        description: description.trim() || 'Paso del sistema',
         imageUrl: imageUrl.trim(),
       },
       ...current,
@@ -583,169 +553,124 @@ function AdminPanel({
   }
 
   const saveBrand = () => {
+    const normalizedLogoUrl =
+      logoUrl.trim() && logoUrl.trim() !== '/logo.png' && logoUrl.trim() !== '/img/favicon.png'
+        ? logoUrl.trim()
+        : DEFAULT_LOGO_URL
+
     setBrand({
-      logoUrl: logoUrl.trim(),
+      logoUrl: normalizedLogoUrl,
       brandName: brandName.trim() || defaultBrand.brandName,
       tagline: tagline.trim() || defaultBrand.tagline,
     })
   }
 
-  const resetBrand = () => {
-    setBrand(defaultBrand)
-    setLogoUrl(defaultBrand.logoUrl)
-    setBrandName(defaultBrand.brandName)
-    setTagline(defaultBrand.tagline)
-  }
-
   return (
     <main className="admin-shell">
-      <section className="admin-hero">
-        <div>
-          <div className="eyebrow">Panel interno</div>
-          <h1>Administra las imagenes reales que aparecen en la landing</h1>
-          <p className="hero-text">
-            Carga screenshots reales de tu app desde tu computadora o pega una
-            URL. Todo se guarda en este navegador y se muestra automaticamente
-            en la landing y dentro del hero.
-          </p>
-        </div>
-
+      <header className="admin-header">
+        <h1>Panel simple</h1>
         <div className="admin-actions">
           <a className="secondary-action" href="/">
             Volver a la landing
           </a>
-          <button className="primary-action admin-button" type="button" onClick={resetGallery}>
-            Limpiar galeria
+          <button className="secondary-action admin-button" type="button" onClick={resetGallery}>
+            Limpiar imagenes
           </button>
         </div>
-      </section>
+      </header>
 
       <section className="admin-grid">
-        <div className="admin-form-stack">
-          <section className="admin-form-card">
-            <h2>Marca y logo</h2>
+        <form className="admin-card" onSubmit={onSubmit}>
+          <h2>Subir imagen del sistema</h2>
 
-            <label>
-              <span>Nombre visible</span>
-              <input value={brandName} onChange={(event) => setBrandName(event.target.value)} />
-            </label>
+          <label>
+            <span>Titulo</span>
+            <input value={title} onChange={(event) => setTitle(event.target.value)} />
+          </label>
 
-            <label>
-              <span>Bajada corta</span>
-              <textarea
-                rows={3}
-                value={tagline}
-                onChange={(event) => setTagline(event.target.value)}
-              />
-            </label>
+          <label>
+            <span>Descripcion</span>
+            <textarea
+              rows={3}
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+            />
+          </label>
 
-            <label>
-              <span>URL del logo</span>
-              <input
-                value={logoUrl}
-                onChange={(event) => setLogoUrl(event.target.value)}
-                placeholder="https://..."
-              />
-            </label>
+          <label>
+            <span>URL de imagen</span>
+            <input
+              value={imageUrl}
+              onChange={(event) => setImageUrl(event.target.value)}
+              placeholder="https://..."
+            />
+          </label>
 
-            <label>
-              <span>O subir logo</span>
-              <input type="file" accept="image/*" onChange={onLogoFileChange} />
-            </label>
+          <label>
+            <span>O subir archivo</span>
+            <input type="file" accept="image/*" onChange={onFileChange} />
+          </label>
 
-            <div className="admin-brand-preview">
-              <div className="brand-logo-box">
-                {logoUrl ? (
-                  <img className="brand-logo-image" src={logoUrl} alt={brandName || 'Logo'} />
-                ) : (
-                  <span className="brand-logo-placeholder">Logo</span>
-                )}
-              </div>
-              <div className="brand-copy">
-                <span className="brand-kicker">Software para centros de estetica</span>
-                <strong>{brandName || defaultBrand.brandName}</strong>
-                <span>{tagline || defaultBrand.tagline}</span>
-              </div>
+          {imageUrl ? (
+            <div className="admin-preview">
+              <img src={imageUrl} alt="Vista previa" />
             </div>
+          ) : null}
 
-            <div className="admin-inline-actions">
-              <button className="primary-action admin-button" type="button" onClick={saveBrand}>
-                Guardar marca
-              </button>
-              <button className="secondary-action admin-button" type="button" onClick={resetBrand}>
-                Restaurar marca
-              </button>
-            </div>
-          </section>
+          <button className="primary-action admin-button" type="submit">
+            Guardar imagen
+          </button>
+        </form>
 
-          <form className="admin-form-card" onSubmit={onSubmit}>
-            <h2>Nueva imagen</h2>
+        <section className="admin-card">
+          <h2>Marca</h2>
 
-            <label>
-              <span>Titulo</span>
-              <input value={title} onChange={(event) => setTitle(event.target.value)} />
-            </label>
+          <label>
+            <span>Nombre visible</span>
+            <input value={brandName} onChange={(event) => setBrandName(event.target.value)} />
+          </label>
 
-            <label>
-              <span>Descripcion</span>
-              <textarea
-                rows={4}
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
-              />
-            </label>
+          <label>
+            <span>Bajada corta</span>
+            <textarea
+              rows={3}
+              value={tagline}
+              onChange={(event) => setTagline(event.target.value)}
+            />
+          </label>
 
-            <label>
-              <span>URL de imagen</span>
-              <input
-                value={imageUrl}
-                onChange={(event) => setImageUrl(event.target.value)}
-                placeholder="https://..."
-              />
-            </label>
+          <label>
+            <span>URL del logo</span>
+            <input value={logoUrl} onChange={(event) => setLogoUrl(event.target.value)} placeholder="https://..." />
+          </label>
 
-            <label>
-              <span>O subir archivo</span>
-              <input type="file" accept="image/*" onChange={onFileChange} />
-            </label>
+          <label>
+            <span>O subir logo</span>
+            <input type="file" accept="image/*" onChange={onLogoFileChange} />
+          </label>
 
-            {imageUrl ? (
-              <div className="admin-preview">
-                <img src={imageUrl} alt="Vista previa de captura" />
-              </div>
-            ) : null}
-
-            <button className="primary-action admin-button" type="submit">
-              Guardar imagen
-            </button>
-          </form>
-        </div>
-
-        <section className="admin-gallery-card">
-          <div className="admin-gallery-header">
-            <h2>Imagenes cargadas</h2>
-            <p>{gallery.length} imagenes activas en la landing</p>
-          </div>
-
-          <div className="admin-gallery-list">
-            {gallery.map((item) => (
-              <article key={item.id} className="admin-gallery-item">
-                <img src={item.imageUrl} alt={item.title} />
-                <div className="admin-gallery-copy">
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-                <button
-                  className="danger-button"
-                  type="button"
-                  onClick={() => removeImage(item.id)}
-                >
-                  Eliminar
-                </button>
-              </article>
-            ))}
-          </div>
+          <button className="primary-action admin-button" type="button" onClick={saveBrand}>
+            Guardar marca
+          </button>
         </section>
+      </section>
+
+      <section className="admin-gallery">
+        <h2>Imagenes cargadas ({gallery.length})</h2>
+        <div className="admin-gallery-list">
+          {gallery.map((item) => (
+            <article key={item.id} className="admin-gallery-item">
+              <img src={item.imageUrl} alt={item.title} />
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+              <button className="danger-button" type="button" onClick={() => removeImage(item.id)}>
+                Eliminar
+              </button>
+            </article>
+          ))}
+        </div>
       </section>
     </main>
   )
