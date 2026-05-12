@@ -11,14 +11,15 @@
 
   --font-body: 'Manrope', 'Segoe UI', sans-serif;
   --font-display: 'Sora', 'Segoe UI', sans-serif;
-  --tone-bg: #ffffff;
-  --tone-surface: rgba(255, 255, 255, 0.9);
-  --tone-ink: #081120;
-  --tone-muted: #5b6b86;
-  --tone-accent: #2563eb;
-  --tone-line: rgba(37, 99, 235, 0.14);
-  --tone-panel: rgba(245, 248, 255, 0.88);
-  --tone-panel-strong: rgba(10, 20, 38, 0.96);
+  --tone-bg: #040912;
+  --tone-surface: rgba(17, 22, 34, 0.9);
+  --tone-ink: #f9ecf7;
+  --tone-muted: #d9bfd4;
+  --tone-accent: #c57ab4;
+  --tone-accent-strong: #a95f98;
+  --tone-line: rgba(197, 122, 180, 0.28);
+  --tone-panel: rgba(53, 38, 58, 0.66);
+  --tone-panel-strong: rgba(18, 12, 22, 0.96);
 }
 
 * {
@@ -34,7 +35,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   color: var(--tone-ink);
-  background: linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
+  background-color: rgb(34, 23, 51);
 }
 
 a {

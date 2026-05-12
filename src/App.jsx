@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./App.css";
 
 const problemas = [
@@ -5,7 +6,7 @@ const problemas = [
     problema: "Responder mensajes para agendar los turnos",
     solucion:
       "Tus clientes reservan online con agendas disponibles en tiempo real.",
-    resultado: "Menos mensajes para responder.",
+    resultado: "Más tiempo libre para vos.",
   },
   {
     problema: "Errores humanos en la agenda",
@@ -16,27 +17,43 @@ const problemas = [
   {
     problema: "Perder dinero por no cobrar seña",
     solucion:
-      "Se cobra la seña por Mercado Pago y automaticamente se agenda el turno.",
+      "Se cobra la seña automáticamente por Mercado Pago y automáticamente se agenda el turno.",
     resultado: "Evita la pérdida de ingresos por no cobrar seña.",
   },
   {
     problema: "Ausencias",
     solucion:
-      "Confirmaciones de turno por mail y recordatorios por WhatsApp el dia anterior.",
+      "Confirmaciones de turno por mail y recordatorios por WhatsApp el día anterior.",
     resultado: "Reduce las ausencias considerablemente.",
   },
   {
-    problema: "Problemas para reprogramar turnos",
+    problema: "Reprogramaciones de turnos",
     solucion:
-      "El sistema permite al cliente reprogramar turnos desde el panel de control (Solo con anticipación).",
+      "Tanto el cliente como el profesional pueden reprogramar turnos desde el panel de control con total facilidad.",
     resultado: "Reduce tu carga administrativa.",
   },
   {
-    problema: "¿Un profesional hace varios servicios?",
+    problema:
+      "Profesional que ofrece varios servicios con horarios compartidos",
     solucion:
       "Ejemplo: Profesional realiza servicios A y B, si un cliente reserva en A, ese mismo horario deja de estar disponible en B.",
     resultado:
       "Evita conflictos de disponibilidad y permite mostrar agenda real de cada profesional.",
+  },
+  {
+    problema:
+      "Usar Excel para organizar turnos, servicios, profesionales y clientes",
+    solucion:
+      "Vistas de turnos por día, servicio, profesional o gabinete, con filtros y búsquedas rápidas.",
+    resultado:
+      "Evita errores humanos, ahorra tiempo y permite tener toda la información a mano.",
+  },
+  {
+    problema: "Llevar control de los ingresos generados",
+    solucion:
+      "Registro de pagos parciales, totales, señas y reembolsos, para cada turno y cliente.",
+    resultado:
+      "Evitar errores de registro y permite un control preciso de los ingresos.",
   },
 ];
 
@@ -44,7 +61,7 @@ const solucionesPrincipales = [
   {
     titulo: "Reservas con reglas claras",
     texto:
-      "Agenda semanal, fechas puntuales, anticipacion configurable y bloqueos especificos.",
+      "Agenda semanal, fechas puntuales, anticipación configurable y bloqueos específicos.",
   },
   {
     titulo: "Pagos y confirmaciones",
@@ -52,32 +69,33 @@ const solucionesPrincipales = [
       "Señas por porcentaje o monto fijo, pagos parciales, totales y reembolsos registrados.",
   },
   {
-    titulo: "Operacion centralizada",
+    titulo: "Operación centralizada",
     texto:
-      "Turnos, clientes, historial clinico, asistencia, ausencias y filtros en un solo panel.",
+      "Turnos, clientes, historial clínico, asistencia, ausencias y filtros en un solo panel.",
   },
 ];
 
 const condicionesComerciales = [
   {
     titulo: "Servicio sin costo",
-    texto: "Solo se una comisión al cliente al agendar un turno.",
+    texto: "Solo se cobra comisión al cliente cuando agenda un turno.",
   },
   {
     titulo: "Sin límites",
     texto:
-      "Crea cuantos servicios, profesionales, gabinetes y turnos quieras sin pagar mas.",
+      "Crea cuantos servicios, profesionales, gabinetes y turnos quieras sin pagar nada.",
   },
   {
     titulo: "Prueba sin compromiso",
-    texto: "Probá la plataforma sin ningún riesgo.",
+    texto:
+      "Probá la plataforma sin ningún riesgo, podés dejar de usarla en cualquier momento.",
   },
 ];
 
 const flujo = [
   "El cliente elige servicio, variables y horario.",
   "El sistema valida disponibilidad y gabinete.",
-  "El turno se confirma automaticamente al abonar seña.",
+  "El turno se confirma automáticamente al abonar seña.",
   "Desde el panel se administra pagos, asistencia, historial y reprogramaciones.",
 ];
 
@@ -85,17 +103,17 @@ const detalleTecnico = [
   {
     titulo: "Agenda",
     items: [
-      "Horarios diferentes por dia",
-      "Varias franjas en el mismo dia",
-      "Dias no laborables",
+      "Horarios diferentes por día",
+      "Varias franjas en el mismo día",
+      "Días no laborables",
       "Bloqueos puntuales",
-      "Agendas por semanas, meses o fechas especificas",
+      "Agendas por semanas, meses o fechas específicas",
     ],
   },
   {
     titulo: "Servicios",
     items: [
-      "Variables de seleccion unica o multiple",
+      "Variables de selección única o múltiple",
       "Packs o turnos individuales",
       "Gabinetes compartidos",
       "Descuentos por pago en efectivo",
@@ -109,7 +127,7 @@ const detalleTecnico = [
       "Registrar pagos parciales, totales y señas",
       "Registrar asistencias o ausencias",
       "Historial completo de cada cliente",
-      "Filtrar turnos por dia, servicio, gabinete o profesional",
+      "Filtrar turnos por día, servicio, gabinete o profesional",
       "Controlar servicios, variables, packs y agendas especiales",
     ],
   },
@@ -119,13 +137,88 @@ const detalleTecnico = [
       "Mail al cliente para confirmar su turno",
       "Recibe mails cuando solicitan o confirman un turno.",
       "Envío rápido de WhatsApp a clientes desde el panel",
-      "Recordatorio por WhatsApp el dia anterior al turno",
+      "Recordatorio por WhatsApp el día anterior al turno",
       "Reseñas reales de Google",
     ],
   },
 ];
 
+const condicionesDeUso = [
+  {
+    titulo: "Modalidad de cobro",
+    texto:
+      "MisTurnosApp no posee costo fijo mensual. Solo se cobra comisión por turno señado o confirmado mediante la plataforma.",
+  },
+  {
+    titulo: "Confirmación automática",
+    texto:
+      "En reservas con pago online, la comisión correspondiente se liquida automáticamente al momento de la acreditación del pago.",
+  },
+  {
+    titulo: "Confirmación manual y carga de turnos manual",
+    texto:
+      "Los turnos aprobados manualmente por el profesional y los cargados por el administrador también generan comisión de servicio. Dichas comisiones se liquidan de forma quincenal.",
+  },
+  {
+    titulo: "Liquidación y pago",
+    texto:
+      "Las liquidaciones se realizan de forma quincenal: el día 16 se liquida el período del 1 al 15, y el día 1 se liquida el período del 16 al último día del mes anterior. Cada liquidación será enviada con la liquidación correspondiente y deberá abonarse dentro de las 72 horas posteriores a su emisión.",
+  },
+  {
+    titulo: "Uso responsable",
+    texto:
+      "La aprobación manual de turnos deberá reflejar reservas reales realizadas mediante MisTurnosApp.",
+  },
+  {
+    titulo: "Suspensión por falta de pago",
+    texto:
+      "La falta de pago de liquidaciones podrá generar suspensión temporal o definitiva del servicio.",
+  },
+  {
+    titulo: "Suspensión por inactividad",
+    texto:
+      "La inactividad por más de treinta (30) días corridos podrá generar la suspensión temporal del servicio. La reactivación quedará sujeta a revisión.",
+  },
+  {
+    titulo: "Actualizaciones y mejoras",
+    texto:
+      "MisTurnosApp podrá incorporar nuevas funcionalidades y mejoras sin costo adicional salvo comunicación expresa.",
+  },
+];
+
 function App() {
+  const [termsOpen, setTermsOpen] = useState(false);
+
+  const handleSignupSubmit = (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+    const mensaje = [
+      "Hola Iván, quiero dar de alta mi negocio en misturnosapp.",
+      "",
+      `Nombre: ${data.get("nombre")}`,
+      `Negocio: ${data.get("negocio")}`,
+      `Subdominio: ${data.get("subdominio")}.misturnosapp.com.ar`,
+      `Rubro: ${data.get("rubro")}`,
+      `WhatsApp: ${data.get("telefono")}`,
+      `Gmail: ${data.get("mail")}`,
+      `Ciudad: ${data.get("ciudad")}`,
+      `Comentario: ${data.get("comentario") || "Sin comentario"}`,
+      "Acepta condiciones de uso: Sí",
+    ].join("\n");
+
+    window.open(
+      `https://wa.me/5491130580879?text=${encodeURIComponent(mensaje)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
+
+  const handleTermsLinkClick = (event) => {
+    event.preventDefault();
+    setTermsOpen(true);
+  };
+
   return (
     <main className="site-shell">
       <header className="site-nav">
@@ -135,11 +228,14 @@ function App() {
             alt="MiTurnos App"
           />
         </a>
+        <a className="nav-action" href="#alta">
+          Darme de alta
+        </a>
       </header>
 
       <section className="hero-section" id="inicio">
         <p className="section-kicker">Agenda de turnos</p>
-        <h1>¿Seguis agendando turnos por WhatsApp?</h1>
+        <h1>¿Todavía agendás turnos por WhatsApp?</h1>
         <p className="hero-lead">
           Reducí los mensajes que recibís y dejá que tus clientes reserven
           online sin tu intervención, evitando errores humanos en la agenda.
@@ -153,17 +249,20 @@ function App() {
           ))}
         </div>
         <div className="hero-actions">
+          <a className="primary-action signup-hero-button" href="#alta">
+            Darme de alta
+          </a>
           <a
-            className="primary-action demo-hero-button"
+            className="secondary-action demo-hero-button"
             href="https://demo.misturnosapp.com.ar"
             target="_blank"
             rel="noreferrer"
           >
-            Ver pagina
+            Ver página
           </a>
           <a
             className="whatsapp-action"
-            href="https://wa.me/113058087"
+            href="https://wa.me/5491130580879?text=Hola%20Iván,%20me%20interesa%20saber%20más%20sobre%20misturnosapp."
             target="_blank"
             rel="noreferrer"
           >
@@ -178,7 +277,7 @@ function App() {
       <section className="problem-section" id="soluciones">
         <div className="section-heading">
           <p className="section-kicker">Problemas reales</p>
-          <h2>Los problemas que resolvemos</h2>
+          <h2>Algunos de los problemas que resuelve misturnosapp</h2>
         </div>
 
         <div className="problem-grid">
@@ -195,7 +294,7 @@ function App() {
       <section className="solution-section">
         <div className="section-heading">
           <p className="section-kicker">La propuesta</p>
-          <h2>Un sistema breve de explicar, completo para operar</h2>
+          <h2>Un sistema muy completo y muy fácil de operar</h2>
         </div>
 
         <div className="solution-grid">
@@ -210,7 +309,7 @@ function App() {
 
       <section className="flow-section">
         <div className="section-heading">
-          <p className="section-kicker">Como funciona</p>
+          <p className="section-kicker">Cómo funciona</p>
           <h2>Gestión de turnos</h2>
         </div>
 
@@ -223,7 +322,7 @@ function App() {
 
       <section className="technical-section" id="detalle">
         <div className="section-heading">
-          <p className="section-kicker">Detalle tecnico</p>
+          <p className="section-kicker">Detalle técnico</p>
           <h2>Funciones incluidas, agrupadas por uso</h2>
         </div>
 
@@ -241,6 +340,138 @@ function App() {
         </div>
       </section>
 
+      <section className="signup-section" id="alta">
+        <div className="section-heading">
+          <p className="section-kicker">Alta de comercio</p>
+          <h2>¿Querés tu propia página web + sistema de turnos?</h2>
+          <p>
+            Completá el formulario y se abre WhatsApp con la solicitud lista
+            para enviar. Nos pondremos en contacto para ayudarte a configurar tu
+            página y agenda, y te acompañaremos en el proceso de alta para que
+            puedas empezar a recibir reservas online lo antes posible.
+          </p>
+        </div>
+
+        <form className="signup-form" onSubmit={handleSignupSubmit}>
+          <label>
+            Nombre y apellido
+            <input name="nombre" type="text" autoComplete="name" required />
+          </label>
+
+          <label>
+            Nombre del negocio
+            <input
+              name="negocio"
+              type="text"
+              autoComplete="organization"
+              required
+            />
+          </label>
+
+          <label>
+            Subdominio deseado
+            <span className="domain-field">
+              <input
+                name="subdominio"
+                type="text"
+                inputMode="url"
+                autoCapitalize="none"
+                autoCorrect="off"
+                pattern="[a-z0-9-]+"
+                placeholder="mi-negocio"
+                title="Usá solo minúsculas, números y guiones"
+                required
+              />
+              <span>.misturnosapp.com.ar</span>
+            </span>
+          </label>
+
+          <label>
+            Rubro
+            <select name="rubro" required defaultValue="">
+              <option value="" disabled>
+                Seleccioná una opción
+              </option>
+              <option>Centro de estética</option>
+              <option>Profesional independiente</option>
+              <option>Peluquería / barbería</option>
+              <option>Consultorio</option>
+              <option>Otro</option>
+            </select>
+          </label>
+
+          <label>
+            WhatsApp
+            <input
+              name="telefono"
+              type="tel"
+              autoComplete="tel"
+              placeholder="Ej: 11 1234 5678"
+              required
+            />
+          </label>
+
+          <label>
+            Mail (obligatorio mail de gmail)
+            <input name="mail" type="email" autoComplete="email" required />
+          </label>
+
+          <label>
+            Ciudad
+            <input
+              name="ciudad"
+              type="text"
+              autoComplete="address-level2"
+              required
+            />
+          </label>
+
+          <label className="form-full">
+            Comentario (opcional)
+            <textarea
+              name="comentario"
+              rows="4"
+              placeholder="Algún detalle que consideres importante."
+            />
+          </label>
+
+          <details
+            className="terms-disclosure form-full"
+            id="condiciones"
+            open={termsOpen}
+            onToggle={(event) => setTermsOpen(event.currentTarget.open)}
+          >
+            <summary>Ver condiciones de uso</summary>
+            <ol className="terms-list">
+              {condicionesDeUso.map((item) => (
+                <li key={item.titulo}>
+                  <h3>
+                    <span aria-hidden="true" />
+                    {item.titulo}
+                  </h3>
+                  <p>{item.texto}</p>
+                </li>
+              ))}
+            </ol>
+          </details>
+
+          <label className="terms-check form-full">
+            <input name="aceptaCondiciones" type="checkbox" required />
+            <span>
+              Acepto las{" "}
+              <a href="#condiciones" onClick={handleTermsLinkClick}>
+                condiciones de uso de MisTurnosApp
+              </a>
+              .
+            </span>
+          </label>
+
+          <button className="primary-action form-full" type="submit">
+            Enviar solicitud por WhatsApp
+          </button>
+        </form>
+      </section>
+
       <section className="closing-section">
         <div>
           <p className="section-kicker">
@@ -249,15 +480,15 @@ function App() {
           <h2>Diseñada para resolver problemas.</h2>
           <p>
             Esta app fue desarrollada junto al centro de Estética{" "}
-            <b>Piel & Cejas</b>, esta pensada para cubrir las necesidades
-            promedio de un centro de estética y adaptandose muy bien a pequeñas
+            <b>Piel & Cejas</b>. Está pensada para cubrir las necesidades
+            promedio de un centro de estética y adaptarse muy bien a pequeñas
             estéticas. Sin costo alguno ofrecemos un sistema de turnos realmente
             profesional y una página web para estar al nivel de cualquier otro
             negocio, sin importar el tamaño del suyo.
           </p>
         </div>
-        <a className="primary-action demo-hero-button" href="#inicio">
-          Volver arriba
+        <a className="primary-action " href="#inicio">
+          Volver al inicio
         </a>
       </section>
     </main>

@@ -12,11 +12,11 @@
   padding: 12px 16px;
   border-radius: 30px;
   background:
-    radial-gradient(circle at 16% 20%, rgba(255, 255, 255, 0.28), transparent 34%),
-    linear-gradient(135deg, #163fb1be, #1e3f8bc5 48%, #1020449e);
+    radial-gradient(circle at 16% 20%, rgba(244, 212, 237, 0.26), transparent 34%),
+    linear-gradient(135deg, rgba(47, 32, 57, 0.9), rgba(31, 21, 40, 0.9) 48%, rgba(12, 8, 18, 0.92));
   box-shadow:
-    0 18px 34px rgba(29, 78, 216, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    0 18px 34px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 236, 248, 0.2);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -40,9 +40,9 @@
   min-height: 42px;
   padding: 0 16px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.26);
-  background: rgba(255, 255, 255, 0.14);
-  color: #ffffff;
+  border: 1px solid var(--tone-line);
+  background: rgba(241, 207, 232, 0.14);
+  color: var(--tone-ink);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -55,9 +55,11 @@
 .solution-section,
 .flow-section,
 .technical-section,
+.terms-section,
+.signup-section,
 .closing-section {
   padding: 42px 0;
-  border-bottom: 1px solid rgba(11, 31, 67, 0.1);
+  border-bottom: 1px solid var(--tone-line);
 }
 
 .hero-section {
@@ -69,7 +71,7 @@
 
 .section-kicker {
   margin: 0;
-  color: #1d4ed8;
+  color: var(--tone-accent);
   font-size: 0.82rem;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -80,7 +82,7 @@
 .section-heading h2,
 .closing-section h2 {
   margin: 0;
-  color: #081120;
+  color: var(--tone-ink);
   font-family: var(--font-display);
   letter-spacing: 0;
 }
@@ -94,45 +96,61 @@
 .hero-lead {
   max-width: 680px;
   margin: 0;
-  color: #435775;
+  color: var(--tone-muted);
   font-size: 1.25rem;
   line-height: 1.58;
 }
 
 .hero-actions {
   display: flex;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 4px;
+}
+
+.hero-actions .primary-action,
+.hero-actions .secondary-action,
+.hero-actions .whatsapp-action {
+  margin-left: 0;
+  margin-right: 0;
+  width: auto;
 }
 
 .primary-action,
 .secondary-action,
 .whatsapp-action {
   min-height: 50px;
+  min-width: 300px;
+  max-width: 600px;
+  margin: 16px auto 8px auto;
   padding: 0 20px;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(11, 31, 67, 0.16);
+  border: 1px solid var(--tone-line);
   font-weight: 850;
 }
 
 .primary-action {
-  color: #ffffff;
-  border-color: rgba(18, 42, 88, 0.95);
+  color: #fff7fd;
+  border-color: rgba(217, 159, 203, 0.65);
   background:
-    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.28), transparent 32%),
-    linear-gradient(135deg, #1d4fd8, #1640a2 48%);
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.3), transparent 32%),
+    linear-gradient(135deg, var(--tone-accent), var(--tone-accent-strong) 48%);
   box-shadow:
-    0 18px 34px rgba(29, 78, 216, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 18px 34px rgba(169, 95, 152, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
 .secondary-action {
-  background: #ffffff;
-  color: #081120;
+  background: rgba(49, 36, 56, 0.88);
+  color: var(--tone-ink);
+}
+
+.signup-hero-button {
+  min-width: 220px;
 }
 
 .whatsapp-action {
@@ -159,8 +177,8 @@
   margin-left: 12px;
   padding: 4px 9px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 246, 252, 0.3);
+  background: rgba(255, 246, 252, 0.18);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -182,23 +200,23 @@
 .commercial-strip article {
   padding: 16px;
   border-radius: 8px;
-  border: 1px solid rgba(18, 42, 88, 0.16);
+  border: 1px solid var(--tone-line);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(238, 246, 255, 0.82));
-  box-shadow: 0 10px 22px rgba(17, 40, 83, 0.06);
+    linear-gradient(180deg, rgba(52, 36, 59, 0.95), rgba(32, 23, 38, 0.9));
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
 }
 
 .commercial-strip strong {
   display: block;
   margin-bottom: 5px;
-  color: #1d4ed8;
+  color: #efc2e6;
   font-family: var(--font-display);
   font-size: 1.12rem;
 }
 
 .commercial-strip p {
   margin: 0;
-  color: #435775;
+  color: var(--tone-muted);
   line-height: 1.45;
 }
 
@@ -232,10 +250,10 @@
 .technical-card {
   min-height: 100%;
   padding: 18px;
-  border: 1px solid rgba(11, 31, 67, 0.1);
+  border: 1px solid var(--tone-line);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 22px rgba(17, 40, 83, 0.06);
+  background: rgba(28, 20, 35, 0.88);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.24);
 }
 
 .problem-card {
@@ -249,22 +267,23 @@
   margin: 0;
   font-size: 1.08rem;
   letter-spacing: 0;
+  color: #f4d9ee;
 }
 
 .problem-card h3 {
-  color: #b42318;
+  color: #ffc0df;
 }
 
 .problem-card p,
 .solution-card p,
 .closing-section p {
   margin: 0;
-  color: #4b5f7f;
+  color: var(--tone-muted);
   line-height: 1.55;
 }
 
 .problem-card strong {
-  color: #0f766e;
+  color: #f0b7dc;
   font-size: 0.95rem;
 }
 
@@ -286,8 +305,8 @@
 
 .solution-label {
   margin-top: 4px;
-  background: rgba(29, 78, 216, 0.1);
-  color: #1d4ed8;
+  background: rgba(197, 122, 180, 0.2);
+  color: #f2c8e8;
 }
 
 .flow-list {
@@ -303,10 +322,10 @@
 .flow-list li {
   counter-increment: flow;
   padding: 16px;
-  border: 1px solid rgba(11, 31, 67, 0.1);
+  border: 1px solid var(--tone-line);
   border-radius: 8px;
-  background: #ffffff;
-  color: #31425f;
+  background: rgba(30, 22, 37, 0.88);
+  color: #edd5e8;
   font-weight: 750;
   line-height: 1.45;
 }
@@ -315,19 +334,207 @@
   content: counter(flow, decimal-leading-zero);
   display: block;
   margin-bottom: 10px;
-  color: #1d4ed8;
+  color: #f0bce3;
   font-weight: 900;
 }
 
 .technical-card ul {
   margin: 12px 0 0;
   padding-left: 18px;
-  color: #4b5f7f;
+  color: var(--tone-muted);
 }
 
 .technical-card li {
   margin-bottom: 8px;
   line-height: 1.45;
+}
+
+.terms-disclosure {
+  border: 1px solid var(--tone-line);
+  border-radius: 8px;
+  background: rgba(9, 8, 14, 0.34);
+  overflow: hidden;
+}
+
+.terms-disclosure summary {
+  min-height: 48px;
+  padding: 0 14px;
+  color: #efc2e6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-weight: 900;
+}
+
+.terms-disclosure summary::marker {
+  color: var(--tone-accent);
+}
+
+.terms-disclosure[open] summary {
+  border-bottom: 1px solid var(--tone-line);
+}
+
+.terms-disclosure .terms-list {
+  margin: 0;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  list-style: none;
+  counter-reset: terms;
+}
+
+.terms-disclosure .terms-list li {
+  counter-increment: terms;
+  padding: 16px;
+  border: 1px solid var(--tone-line);
+  border-radius: 8px;
+  background: rgba(28, 20, 35, 0.88);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.24);
+}
+
+.terms-disclosure .terms-list h3 span::before {
+  content: counter(terms);
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(197, 122, 180, 0.22);
+  color: #efc2e6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.terms-disclosure .terms-list h3 {
+  margin: 0 0 8px;
+  color: #f4d9ee;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.02rem;
+  letter-spacing: 0;
+}
+
+.terms-disclosure .terms-list p {
+  margin: 0;
+  color: var(--tone-muted);
+  line-height: 1.55;
+}
+
+.signup-section .section-heading p:not(.section-kicker) {
+  max-width: 620px;
+  margin: 0;
+  color: var(--tone-muted);
+  line-height: 1.55;
+}
+
+.signup-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--tone-line);
+  border-radius: 8px;
+  background: rgba(18, 12, 22, 0.84);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.26);
+}
+
+.signup-form label {
+  display: grid;
+  gap: 7px;
+  color: #f4d9ee;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.signup-form input,
+.signup-form select,
+.signup-form textarea {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid rgba(217, 159, 203, 0.32);
+  border-radius: 8px;
+  background: rgba(9, 8, 14, 0.72);
+  color: var(--tone-ink);
+  font: inherit;
+  outline: none;
+  padding: 11px 12px;
+}
+
+.signup-form textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+
+.signup-form input::placeholder,
+.signup-form textarea::placeholder {
+  color: rgba(217, 191, 212, 0.68);
+}
+
+.signup-form input:focus,
+.signup-form select:focus,
+.signup-form textarea:focus {
+  border-color: rgba(239, 194, 230, 0.88);
+  box-shadow: 0 0 0 3px rgba(197, 122, 180, 0.16);
+}
+
+.domain-field {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) auto;
+  align-items: stretch;
+}
+
+.domain-field input {
+  border-radius: 8px 0 0 8px;
+}
+
+.domain-field span {
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid rgba(217, 159, 203, 0.32);
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+  background: rgba(241, 207, 232, 0.1);
+  color: #efc2e6;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.domain-field:focus-within span {
+  border-color: rgba(239, 194, 230, 0.88);
+}
+
+.terms-check {
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  color: var(--tone-muted);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.terms-check input {
+  width: 18px;
+  min-height: 18px;
+  margin-top: 2px;
+  accent-color: var(--tone-accent);
+}
+
+.terms-check a {
+  color: #efc2e6;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.signup-form button {
+  cursor: pointer;
+  font: inherit;
+}
+
+.form-full {
+  grid-column: 1 / -1;
 }
 
 .closing-section {
@@ -349,8 +556,14 @@
   .commercial-strip,
   .flow-list,
   .technical-grid,
+  .terms-list,
+  .signup-form,
   .closing-section {
     grid-template-columns: 1fr;
+  }
+
+  .form-full {
+    grid-column: auto;
   }
 
   .hero-section h1 {
@@ -388,6 +601,8 @@
   .solution-section,
   .flow-section,
   .technical-section,
+  .terms-section,
+  .signup-section,
   .closing-section {
     padding: 30px 0;
   }
@@ -404,9 +619,24 @@
     font-size: 1.05rem;
   }
 
-  .primary-action,
-  .secondary-action,
-  .whatsapp-action {
+  .hero-actions .primary-action,
+  .hero-actions .secondary-action,
+  .hero-actions .whatsapp-action {
     width: 100%;
+  }
+
+  .domain-field {
+    grid-template-columns: 1fr;
+  }
+
+  .domain-field input {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .domain-field span {
+    min-height: 42px;
+    border-top: 0;
+    border-left: 1px solid rgba(217, 159, 203, 0.32);
+    border-radius: 0 0 8px 8px;
   }
 }
