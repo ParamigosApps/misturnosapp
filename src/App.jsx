@@ -3,142 +3,143 @@ import "./App.css";
 
 const problemas = [
   {
-    problema: "Responder mensajes para agendar los turnos",
+    problema: "Perdés tiempo respondiendo mensajes",
     solucion:
-      "Tus clientes reservan online con agendas disponibles en tiempo real.",
-    resultado: "Más tiempo libre para vos.",
+      "Tus clientes ven servicios, precios y horarios disponibles desde el celular. Eligen su turno sin consultarte.",
+    resultado: "Ya no agendas turnos por WhatsApp.",
   },
   {
-    problema: "Errores humanos en la agenda",
+    problema: "Los errores de agenda generan problemas",
     solucion:
-      "El sistema bloquea horarios por servicio, profesional o gabinete compartido.",
-    resultado: "Agenda ordenada, sin cruces ni doble reserva.",
+      "El sistema muestra disponibilidad real y bloquea los horarios ocupados de cada profesional.",
+    resultado: "Mantenés la agenda ordenada y evitás cruces.",
   },
   {
-    problema: "Perder dinero por no cobrar seña",
+    problema: "Perder dinero por ausencias",
     solucion:
-      "Se cobra la seña automáticamente por Mercado Pago y automáticamente se agenda el turno.",
-    resultado: "Evita la pérdida de ingresos por no cobrar seña.",
+      "Evitá la incomodidad de cobrar señas, el sistema lo hace por vos.",
+    resultado: "Reducís ausencias y cuidas tus ingresos.",
   },
   {
-    problema: "Ausencias",
+    problema: "No sabés con claridad qué se cobró y qué falta cobrar",
     solucion:
-      "Confirmaciones de turno por mail y recordatorios por WhatsApp el día anterior.",
-    resultado: "Reduce las ausencias considerablemente.",
-  },
-  {
-    problema: "Reprogramaciones de turnos",
-    solucion:
-      "Tanto el cliente como el profesional pueden reprogramar turnos desde el panel de control con total facilidad.",
-    resultado: "Reduce tu carga administrativa.",
-  },
-  {
-    problema:
-      "Profesional que ofrece varios servicios con horarios compartidos",
-    solucion:
-      "Ejemplo: Profesional realiza servicios A y B, si un cliente reserva en A, ese mismo horario deja de estar disponible en B.",
+      "Consultá cada turno y registrá señas, pagos parciales, pagos totales y reembolsos desde un único panel.",
     resultado:
-      "Evita conflictos de disponibilidad y permite mostrar agenda real de cada profesional.",
-  },
-  {
-    problema:
-      "Usar Excel para organizar turnos, servicios, profesionales y clientes",
-    solucion:
-      "Vistas de turnos por día, servicio, profesional o gabinete, con filtros y búsquedas rápidas.",
-    resultado:
-      "Evita errores humanos, ahorra tiempo y permite tener toda la información a mano.",
-  },
-  {
-    problema: "Llevar control de los ingresos generados",
-    solucion:
-      "Registro de pagos parciales, totales, señas y reembolsos, para cada turno y cliente.",
-    resultado:
-      "Evitar errores de registro y permite un control preciso de los ingresos.",
+      "Controlás tus ingresos sin depender de anotaciones o planillas.",
   },
 ];
 
 const solucionesPrincipales = [
   {
-    titulo: "Reservas con reglas claras",
+    titulo: "Menos mensajes",
     texto:
-      "Agenda semanal, fechas puntuales, anticipación configurable y bloqueos específicos.",
+      "Tus clientes reservan online según tu disponibilidad real, sin depender de una conversación por WhatsApp.",
   },
   {
-    titulo: "Pagos y confirmaciones",
+    titulo: "Menos ausencias",
     texto:
-      "Señas por porcentaje o monto fijo, pagos parciales, totales y reembolsos registrados.",
+      "Cobrá señas online y enviá confirmaciones y recordatorios automáticos por mail.",
   },
   {
-    titulo: "Operación centralizada",
+    titulo: "Más control",
     texto:
-      "Turnos, clientes, historial clínico, asistencia, ausencias y filtros en un solo panel.",
+      "Consultá turnos, clientes, asistencias, pagos y saldos pendientes desde un solo lugar.",
   },
 ];
 
 const condicionesComerciales = [
   {
-    titulo: "Servicio sin costo",
-    texto: "Solo se cobra comisión al cliente cuando agenda un turno.",
+    titulo: "Sin abono mensual",
+    texto: "El cliente abona un costo de servicio de $400 cuando reserva.",
   },
   {
     titulo: "Sin límites",
     texto:
-      "Crea cuantos servicios, profesionales, gabinetes y turnos quieras sin pagar nada.",
+      "Creá cuantos servicios, profesionales, gabinetes y turnos quieras sin pagar extra.",
   },
   {
     titulo: "Prueba sin compromiso",
     texto:
-      "Probá la plataforma sin ningún riesgo, podés dejar de usarla en cualquier momento.",
+      "Probá la plataforma sin ningún riesgo. No pedimos datos sensibles y podés darte de baja en cualquier momento.",
   },
 ];
 
 const flujo = [
-  "El cliente elige servicio, variables y horario.",
-  "El sistema valida disponibilidad y gabinete.",
-  "El turno se confirma automáticamente al abonar seña.",
-  "Desde el panel se administra pagos, asistencia, historial y reprogramaciones.",
+  "El cliente elige el servicio y un horario disponible.",
+  "El sistema valida la disponibilidad y solicita la seña si corresponde.",
+  "El cliente abona online y el sistema registra el pago.",
+  "El cliente y el negocio reciben la confirmación por mail.",
 ];
 
 const detalleTecnico = [
   {
-    titulo: "Agenda",
-    items: [
-      "Horarios diferentes por día",
-      "Varias franjas en el mismo día",
-      "Días no laborables",
-      "Bloqueos puntuales",
-      "Agendas por semanas, meses o fechas específicas",
-    ],
-  },
-  {
     titulo: "Servicios",
     items: [
-      "Variables de selección única o múltiple",
-      "Packs o turnos individuales",
-      "Gabinetes compartidos",
+      "Items adicionales para personalizar el servicio",
+      "Ofrece turnos individuales o packs.",
+      "Para horarios complicados, ofrece confirmación manual por parte del profesional",
+      "Servicios administrados por el negocio o por cada profesional",
       "Descuentos por pago en efectivo",
-      "Señas fijas o porcentuales",
+      "Cobra señas fijas o por porcentaje",
     ],
   },
   {
     titulo: "Panel",
     items: [
-      "Confirmar, rechazar, agendar o reprogramar turnos",
-      "Registrar pagos parciales, totales y señas",
-      "Registrar asistencias o ausencias",
-      "Historial completo de cada cliente",
-      "Filtrar turnos por día, servicio, gabinete o profesional",
-      "Controlar servicios, variables, packs y agendas especiales",
+      "Resumen diario de turnos, cobros y pendientes",
+      "Agenda general por gabinete, servicio o profesional",
+      "Agendar turnos manualmente",
+      "Confirmar, rechazar, cancelar, restaurar o reprogramar turnos",
+      "Registrar señas, pagos parciales, pagos totales y reembolsos",
+      "Marcar asistencias o ausencias",
+      "Cerrar múltiples turnos y completar pagos en una sola acción",
+      "Filtrar por fecha, estado, pago, cliente, servicio o gabinete",
+      "Exportar la agenda en planillas CSV",
+      "Alertas de turnos sin confirmar y pagos pendientes",
+    ],
+  },
+  {
+    titulo: "Clientes",
+    items: [
+      "Historial completo de turnos y pagos por cliente",
+      "Ficha clínica con motivo, observaciones, evolución e indicaciones",
+      "Búsqueda por nombre, email o teléfono",
+      "Acceso rápido a WhatsApp desde cada perfil",
+      "Área personal para consultar próximos turnos, pagos e historial",
+      "Cancelación y reprogramación online configurables",
+    ],
+  },
+  {
+    titulo: "Cobros",
+    items: [
+      "Integración con Mercado Pago",
+      "Confirmación automática al acreditarse el pago",
+      "Cobro online de señas o servicios",
+      "Registro manual de pagos parciales, totales y reembolsos",
+      "Control de saldos pendientes",
+      "Liquidaciones quincenales con historial y exportación PDF",
+    ],
+  },
+  {
+    titulo: "Equipo",
+    items: [
+      "Accesos separados para profesionales, administrativos y dueños",
+      "Agenda propia para cada profesional",
+      "Gestión de turnos asignados desde el panel profesional",
+      "Crear empleados empleados",
+      "Exhibir profesionales",
+      "Seguimiento clínico desde la agenda del profesional",
     ],
   },
   {
     titulo: "Comunicación",
     items: [
-      "Mail al cliente para confirmar su turno",
-      "Recibe mails cuando solicitan o confirman un turno.",
-      "Envío rápido de WhatsApp a clientes desde el panel",
-      "Recordatorio por WhatsApp el día anterior al turno",
-      "Reseñas reales de Google",
+      "Mail automático al cliente al confirmar o reprogramar un turno",
+      "Mail al negocio cuando ingresa una solicitud o reserva confirmada",
+      "Recordatorio automático por mail el día anterior",
+      "Envío rápido de WhatsApp desde el panel",
+      "Condiciones de reserva personalizables",
+      "Reseñas reales de Google sincronizadas automáticamente",
     ],
   },
 ];
@@ -175,14 +176,14 @@ const condicionesDeUso = [
       "La falta de pago de liquidaciones podrá generar suspensión temporal o definitiva del servicio.",
   },
   {
-    titulo: "Suspensión por inactividad",
+    titulo: "Inactividad del servicio",
     texto:
-      "La inactividad por más de treinta (30) días corridos podrá generar la suspensión temporal del servicio. La reactivación quedará sujeta a revisión.",
+      "Para garantizar un uso responsable de la plataforma y evitar costos operativos sobre páginas que no se encuentran en funcionamiento, MisTurnosApp podrá suspender temporalmente aquellas páginas que no sean activadas dentro de los diez (10) días corridos posteriores al alta, o que permanezcan inactivas por más de treinta (30) días corridos. La reactivación podrá solicitarse posteriormente y quedará sujeta a revisión.",
   },
   {
     titulo: "Actualizaciones y mejoras",
     texto:
-      "MisTurnosApp podrá incorporar nuevas funcionalidades y mejoras sin costo adicional salvo comunicación expresa.",
+      "MisTurnosApp mantiene el compromiso de seguir mejorando la plataforma, incorporando ajustes, optimizaciones y nuevas funcionalidades cuando sea posible, sin quitar ni reducir los beneficios ya incluidos para los usuarios activos.",
   },
 ];
 
@@ -229,16 +230,19 @@ function App() {
           />
         </a>
         <a className="nav-action" href="#alta">
-          Darme de alta
+          Quiero mi página
         </a>
       </header>
 
       <section className="hero-section" id="inicio">
         <p className="section-kicker">Agenda de turnos</p>
-        <h1>¿Todavía agendás turnos por WhatsApp?</h1>
+        <h1>Dejá de organizar turnos por WhatsApp</h1>
         <p className="hero-lead">
-          Reducí los mensajes que recibís y dejá que tus clientes reserven
-          online sin tu intervención, evitando errores humanos en la agenda.
+          Tus clientes ven tus servicios, precios, descripciones y horarios
+          disponibles. Eligen el turno, abonan la seña y reciben la
+          confirmación.
+          <br /> <br /> Vos recibís la reserva al instante, reducís consultas
+          repetidas y mantenés tu agenda ordenada.
         </p>
         <div className="commercial-strip" aria-label="Condiciones comerciales">
           {condicionesComerciales.map((item) => (
@@ -250,7 +254,7 @@ function App() {
         </div>
         <div className="hero-actions">
           <a className="primary-action signup-hero-button" href="#alta">
-            Darme de alta
+            Quiero mi página de turnos
           </a>
           <a
             className="secondary-action demo-hero-button"
@@ -276,8 +280,8 @@ function App() {
 
       <section className="problem-section" id="soluciones">
         <div className="section-heading">
-          <p className="section-kicker">Problemas reales</p>
-          <h2>Algunos de los problemas que resuelve misturnosapp</h2>
+          <p className="section-kicker">Menos tareas manuales</p>
+          <h2>Una agenda online que trabaja por vos</h2>
         </div>
 
         <div className="problem-grid">
@@ -293,8 +297,8 @@ function App() {
 
       <section className="solution-section">
         <div className="section-heading">
-          <p className="section-kicker">La propuesta</p>
-          <h2>Un sistema muy completo y muy fácil de operar</h2>
+          <p className="section-kicker">Lo importante</p>
+          <h2>Menos trabajo administrativo, más control</h2>
         </div>
 
         <div className="solution-grid">
@@ -310,7 +314,7 @@ function App() {
       <section className="flow-section">
         <div className="section-heading">
           <p className="section-kicker">Cómo funciona</p>
-          <h2>Gestión de turnos</h2>
+          <h2>¿Cómo saca turno el cliente?</h2>
         </div>
 
         <ol className="flow-list">
@@ -323,7 +327,7 @@ function App() {
       <section className="technical-section" id="detalle">
         <div className="section-heading">
           <p className="section-kicker">Detalle técnico</p>
-          <h2>Funciones incluidas, agrupadas por uso</h2>
+          <h2>Funciones incluidas</h2>
         </div>
 
         <div className="technical-grid">
@@ -412,8 +416,14 @@ function App() {
           </label>
 
           <label>
-            Mail (obligatorio mail de gmail)
-            <input name="mail" type="email" autoComplete="email" required />
+            Gmail (obligatorio para panel administrativo)
+            <input
+              name="mail"
+              type="email"
+              autoComplete="email"
+              placeholder="Ej: miemail@gmail.com"
+              required
+            />
           </label>
 
           <label>
@@ -475,16 +485,17 @@ function App() {
       <section className="closing-section">
         <div>
           <p className="section-kicker">
-            Para profesionales, pequeños, medianos y grandes centros de estética
+            Para profesionales, pequeños, medianos y grandes centros.
           </p>
-          <h2>Diseñada para resolver problemas.</h2>
+          <h2>¿Cómo nació MisTurnosApp?</h2>
           <p>
-            Esta app fue desarrollada junto al centro de Estética{" "}
-            <b>Piel & Cejas</b>. Está pensada para cubrir las necesidades
-            promedio de un centro de estética y adaptarse muy bien a pequeñas
-            estéticas. Sin costo alguno ofrecemos un sistema de turnos realmente
-            profesional y una página web para estar al nivel de cualquier otro
-            negocio, sin importar el tamaño del suyo.
+            MisTurnosApp nació escuchando necesidades reales del rubro estética
+            y la experiencia de <b>Piel & Cejas</b> con plataformas de turnos.
+            Por eso creamos una plataforma profesional, flexible y accesible:
+            sin límites de turnos, sin costos extra por sumar servicios o
+            profesionales, con página web incluida y sin costos para el negocio.
+            Pensada para organizar mejor tu agenda, mejorar la experiencia de
+            tus clientes y crecer sin tener gastos adicionales.
           </p>
         </div>
         <a className="primary-action " href="#inicio">
