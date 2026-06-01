@@ -49,8 +49,8 @@ const solucionesPrincipales = [
 
 const condicionesComerciales = [
   {
-    titulo: "Sin abono mensual",
-    texto: "El cliente abona un costo de servicio de $400 cuando reserva.",
+    titulo: "Sin costo para tu negocio",
+    texto: "El cliente abona un costo de servicio de $400 al reservar.",
   },
   {
     titulo: "Sin límites",
@@ -230,7 +230,7 @@ function App() {
           />
         </a>
         <a className="nav-action" href="#alta">
-          Quiero mi página
+          Darme de alta
         </a>
       </header>
 
@@ -254,7 +254,7 @@ function App() {
         </div>
         <div className="hero-actions">
           <a className="primary-action signup-hero-button" href="#alta">
-            Quiero mi página de turnos
+            Darme de alta
           </a>
           <a
             className="secondary-action demo-hero-button"
@@ -298,7 +298,7 @@ function App() {
       <section className="solution-section">
         <div className="section-heading">
           <p className="section-kicker">Lo importante</p>
-          <h2>Menos trabajo administrativo, más control</h2>
+          <h2>Trabajo organizado</h2>
         </div>
 
         <div className="solution-grid">
@@ -332,14 +332,16 @@ function App() {
 
         <div className="technical-grid">
           {detalleTecnico.map((grupo) => (
-            <article className="technical-card" key={grupo.titulo}>
-              <h3>{grupo.titulo}</h3>
+            <details className="technical-card" key={grupo.titulo}>
+              <summary>
+                <h3>{grupo.titulo}</h3>
+              </summary>
               <ul>
                 {grupo.items.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-            </article>
+            </details>
           ))}
         </div>
       </section>
@@ -347,12 +349,11 @@ function App() {
       <section className="signup-section" id="alta">
         <div className="section-heading">
           <p className="section-kicker">Alta de comercio</p>
-          <h2>¿Querés tu propia página web + sistema de turnos?</h2>
+          <h2>Solicitar página</h2>
           <p>
-            Completá el formulario y se abre WhatsApp con la solicitud lista
-            para enviar. Nos pondremos en contacto para ayudarte a configurar tu
-            página y agenda, y te acompañaremos en el proceso de alta para que
-            puedas empezar a recibir reservas online lo antes posible.
+            Completá el formulario y envianos un mensaje. Te ayudamos a
+            configurar tu página y tu agenda para que empieces a recibir
+            reservas online.
           </p>
         </div>
 

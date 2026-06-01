@@ -344,6 +344,19 @@
   color: var(--tone-muted);
 }
 
+.technical-card summary {
+  list-style: none;
+  pointer-events: none;
+}
+
+.technical-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.technical-card:not([open]) > ul {
+  display: block;
+}
+
 .technical-card li {
   margin-bottom: 8px;
   line-height: 1.45;
@@ -619,10 +632,97 @@
     font-size: 1.05rem;
   }
 
+  .commercial-strip {
+    margin-bottom: 10px;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .hero-section{
+    gap: 6px;
+  }
+
+  .hero-actions .primary-action {
+    grid-column: auto;
+  }
+
   .hero-actions .primary-action,
   .hero-actions .secondary-action,
   .hero-actions .whatsapp-action {
-    width: 100%;
+    width: 70%;
+    min-width: 0;
+    min-height: 46px;
+    margin: 0;
+    padding: 0 16px;
+    font-size: 0.9rem;
+  }
+
+  .hero-actions .whatsapp-action {
+    padding: 0 14px 0 10px;
+  }
+
+  .hero-actions .whatsapp-action svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hero-actions .demo-hero-button::after {
+    margin-left: 8px;
+    padding: 3px 6px;
+    font-size: 0.62rem;
+  }
+
+  .flow-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .flow-list li {
+    padding: 14px;
+    font-size: 0.9rem;
+  }
+
+  .technical-card {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .technical-card summary {
+    min-height: 56px;
+    padding: 16px 18px;
+    cursor: pointer;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .technical-card summary::after {
+    content: "+";
+    color: #f0bce3;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .technical-card[open] summary {
+    border-bottom: 1px solid var(--tone-line);
+  }
+
+  .technical-card[open] summary::after {
+    content: "-";
+  }
+
+  .technical-card:not([open]) > ul {
+    display: none;
+  }
+
+  .technical-card ul {
+    margin: 14px 18px 10px;
   }
 
   .domain-field {
