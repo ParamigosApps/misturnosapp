@@ -3,25 +3,25 @@ import "./App.css";
 
 const problemas = [
   {
-    problema: "Perdés tiempo respondiendo mensajes",
+    problema: "¿Perdés tiempo respondiendo mensajes?",
     solucion:
       "Tus clientes ven servicios, precios y horarios disponibles desde el celular. Eligen su turno sin consultarte.",
     resultado: "Ya no agendas turnos por WhatsApp.",
   },
   {
-    problema: "Los errores de agenda generan problemas",
+    problema: "¿Tenes errores al agendar?",
     solucion:
       "El sistema muestra disponibilidad real y bloquea los horarios ocupados de cada profesional.",
     resultado: "Mantenés la agenda ordenada y evitás cruces.",
   },
   {
-    problema: "Perder dinero por ausencias",
+    problema: "¿Perder dinero por ausencias?",
     solucion:
       "Evitá la incomodidad de cobrar señas, el sistema lo hace por vos.",
     resultado: "Reducís ausencias y cuidas tus ingresos.",
   },
   {
-    problema: "No sabés con claridad qué se cobró y qué falta cobrar",
+    problema: "¿No sabés con claridad qué se cobró y qué falta cobrar?",
     solucion:
       "Consultá cada turno y registrá señas, pagos parciales, pagos totales y reembolsos desde un único panel.",
     resultado:
